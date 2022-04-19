@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mainpckg;
+package app;
 
 /**
  * @author ConnorSullivan31
