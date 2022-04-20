@@ -15,5 +15,10 @@ public class AppAssembler {
 	
 	public void RunWindow() {
 		//Put main logic here
+		int i  = 0;
+		while(true) {
+			System.out.println("Running. . .");
+			i++;
+		}
 	}
 }
