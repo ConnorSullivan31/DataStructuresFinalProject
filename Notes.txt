@@ -4,4 +4,4 @@ This is a shared file for notes outside of what we have commented in code
 WARNING: DO NOT DEVELOP ON MASTER BRANCH
 -
 -
-Currently the name of my upstream github var is: GitHubRepo
+Currently the name of my upstream github var is: GitServer
