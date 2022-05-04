@@ -58,14 +58,12 @@ public class AppAssembler extends Application {
 			master_layout.setVgap(16);//Set spacing in between items to 16 pixels
 			master_layout.setHgap(16);//Set spacing in between items to 16 pixels
 			
-			ColumnConstraints column1, column2, column3;//Our 3 display columns
+			ColumnConstraints column1, column2;//Our 3 display columns
 			column1 = new ColumnConstraints();
-			column1.setPercentWidth(45);
+			column1.setPercentWidth(50);
 			column2 = new ColumnConstraints();
-			column2.setPercentWidth(45);
-			column3 = new ColumnConstraints();
-			column3.setPercentWidth(10);
-			master_layout.getColumnConstraints().addAll(column1,column2,column3);//Use sizing
+			column2.setPercentWidth(50);
+			master_layout.getColumnConstraints().addAll(column1,column2);//Use sizing
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 			//This BorderPane will be for our gcode viewer (requirement #1)
@@ -207,19 +205,10 @@ public class AppAssembler extends Application {
 			load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//Image
-			Image logo = new Image("logo.png");//This must be located in /bin as this is where the javafx classpath is located
-			ImageView logo_view = new ImageView();
-			logo_view.setImage(logo);
-			logo_view.setFitWidth(64);//Set the image to fit into 32 pixels
-			logo_view.setPreserveRatio(true);//Set so that the image scales correctly
-			logo_view.setSmooth(true);//Use better image filtering
-	        logo_view.setCache(true);//Cache image to improve performance
-			GridPane.setConstraints(logo_view, 2, 0);
-			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			
-			master_layout.getChildren().addAll(gcode_layout,automator_layout,status_banner_layout,load_meter_layout,logo_view);//Add all of the items to be displayed
+			
+			master_layout.getChildren().addAll(gcode_layout,automator_layout,status_banner_layout,load_meter_layout);//Add all of the items to be displayed
 			
 			Scene main_view = new Scene(master_layout, 800,600);
 			
