@@ -154,7 +154,7 @@ public class AppAssembler extends Application {
 			//This BorderPane will be for our machine load meter (requirement #4)
 			BorderPane load_meter_layout = new BorderPane();//Create the layout for the machine load meter
 			GridPane.setConstraints(load_meter_layout, 0, 2);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
-			int bar_width = 100, bar_height = 25;
+			int bar_height = 25;
 			double xld = 0.50, yld = 0.25, zld = 0.10, sld = 0.90;//Dummy loads for now
 			
 			Label load_meter_label = new Label("Load Monitoring (%)");//Set the title for the machine load meter in the top of border pane
