@@ -52,6 +52,7 @@ public class StatusBannerViewer {
 		status_banner_label.setText("Machine Status");//Set the label text
 		status_banner_layout.setTop(status_banner_label);//Put the label at the top
 		//Text Area
+		status_banner_display.setText(system_messages_list.ManageSystemBanner());//Set initial value
 		status_banner_display.setPrefSize(400,50);//Set the size of this area
 		status_banner_display.setWrapText(true);
 		status_banner_display.setEditable(false);
