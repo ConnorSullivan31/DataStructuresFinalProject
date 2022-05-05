@@ -36,9 +36,9 @@ public class StatusBannerViewer {
 		button_layout = new HBox();//Set layout for our buttons
 		add_button = new Button();//Set the button label for the plus button
 		sub_button = new Button();//Set the button label for the minus button
-		system_messages_list = new ModelViewInterconnect();//Gets the next system message so we can display it
+		system_messages_list = new ModelViewInterconnect();//Create the link between model and view
 		system_message_timer = new Timeline(new KeyFrame(Duration.millis(timer_interval), event -> {
-			status_banner_display.setText(system_messages_list.ManageSystemBanner());//Display the next message - Called every 3 seconds
+			status_banner_display.setText(system_messages_list.manageSystemBanner());//Display the next message - Called every 3 seconds
 		}));//This is our version of a timer
 		setupViewer();//Init the values for viewer
 	}
@@ -52,7 +52,7 @@ public class StatusBannerViewer {
 		status_banner_label.setText("Machine Status");//Set the label text
 		status_banner_layout.setTop(status_banner_label);//Put the label at the top
 		//Text Area
-		status_banner_display.setText(system_messages_list.ManageSystemBanner());//Set initial value
+		status_banner_display.setText(system_messages_list.manageSystemBanner());//Set initial value
 		status_banner_display.setPrefSize(400,50);//Set the size of this area
 		status_banner_display.setWrapText(true);
 		status_banner_display.setEditable(false);
