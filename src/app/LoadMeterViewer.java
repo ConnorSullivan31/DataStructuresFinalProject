@@ -30,8 +30,9 @@ public class LoadMeterViewer {
 	private LoadMeter x_meter, y_meter, z_meter, s_meter;//Holds our load meter objects
 
 	private Timeline load_timer;//Timer that dictates when messages should rotate
-	private double timer_interval = 500;//Set the timer interval to 50 milliseconds
+	private double timer_interval = 50;//Set the timer interval to 50 milliseconds
 	private Random rand_generator;//Holds a random number for our load meters
+	double x_prev = 0.0, x_new = 0.0, y_prev = 0.0, y_new = 0.0, z_prev = 0.0, z_new = 0.0, s_prev = 0.0, s_new = 0.0;//Placeholder values for bar fading
 	
 	public LoadMeterViewer() {
 		load_meter_layout = new BorderPane();//Create the border pane
@@ -60,7 +61,7 @@ public class LoadMeterViewer {
 		//Label
 		load_meter_label.setText("Load Monitoring (%)");
 		load_meter_layout.setTop(load_meter_label);//Put the label at the top
-		//Load Bar Values
+		//Load Bar Values -- These will be wiped immediately - REMOVE THESE EVENTUALLY
 		x_meter.setAxis("X: ");//Label the axis
 		x_meter.setLoad(.50);//Set load to 50%
 		
@@ -75,17 +76,78 @@ public class LoadMeterViewer {
 		//Load Bar Layout
 		load_bar_layout.getChildren().addAll(x_meter.getLoadMeter(),y_meter.getLoadMeter(),z_meter.getLoadMeter(),s_meter.getLoadMeter());//Add the load bars to the layout. They will be displayed in the order they are added here.
 		load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
+		//Randoms -- Add prev values here if we want them to all start from different values besides 0
+		x_new = rand_generator.nextDouble();//Load an initial random value
+		y_new = rand_generator.nextDouble();//Load an initial random value
+		z_new = rand_generator.nextDouble();//Load an initial random value
+		s_new = rand_generator.nextDouble();//Load an initial random value
 		//Timer
 		load_timer.setCycleCount(Animation.INDEFINITE);
 		load_timer.play();//Start Timer
 	}
 	
 	private void randomizeLoadValues() {
-		x_meter.setLoad(rand_generator.nextDouble());//Set load to random value
-		y_meter.setLoad(rand_generator.nextDouble());//Set load to random value
-	z_meter.setLoad(rand_generator.nextDouble());//Set load to random value
-		s_meter.setLoad(rand_generator.nextDouble());//Set load to random value
-	}
+
+		//Random X fading
+		if(x_prev < x_new) {
+			x_prev += .01;//Increment the old value
+			x_meter.setLoad(x_prev);//Update the load meter
+			if(x_prev >= x_new) {
+				x_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}else if(x_prev > x_new) {
+			x_prev -= .01;//Decrement the old value
+			x_meter.setLoad(x_prev);//Update the load meter
+			if(x_prev <= x_new) {
+				x_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}
+		
+		//Random Y fading
+		if(y_prev < y_new) {
+			y_prev += .01;//Increment the old value
+			y_meter.setLoad(y_prev);//Update the load meter
+			if(y_prev >= y_new) {
+				y_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}else if(y_prev > y_new) {
+			y_prev -= .01;//Decrement the old value
+			y_meter.setLoad(y_prev);//Update the load meter
+			if(y_prev <= y_new) {
+				y_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}
+		
+		//Random Z fading
+		if(z_prev < z_new) {
+			z_prev += .01;//Increment the old value
+			z_meter.setLoad(z_prev);//Update the load meter
+			if(z_prev >= z_new) {
+				z_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}else if(z_prev > z_new) {
+			z_prev -= .01;//Decrement the old value
+			z_meter.setLoad(z_prev);//Update the load meter
+			if(z_prev <= z_new) {
+				z_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}
+		//Random S fading
+		if(s_prev < s_new) {
+			s_prev += .01;//Increment the old value
+			s_meter.setLoad(s_prev);//Update the load meter
+			if(s_prev >= s_new) {
+				s_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}else if(s_prev > s_new) {
+			s_prev -= .01;//Decrement the old value
+			s_meter.setLoad(s_prev);//Update the load meter
+			if(s_prev <= s_new) {
+				s_new = rand_generator.nextDouble();//Get a new random value to fade to
+			}
+		}
+		
+	}//func
 	
 ////////////////////////////////////////////
 //This class got big -- Maybe offload it to its own class in the future
@@ -104,7 +166,7 @@ public class LoadMeterViewer {
 			load_axis_label = new Label();//Create the label
 			load_bar = new ProgressBar();//Create the progress bar
 			load_percent_label = new Label();//Create the load percent label
-			load_val_format = new DecimalFormat();//Create decimal format
+			load_val_format = new DecimalFormat();//Create decimal format -- Could setup here, if so, use "00.00"
 			setupLoadMeter();//Init values
 		}
 		
@@ -125,9 +187,7 @@ public class LoadMeterViewer {
 			HBox.setHgrow(load_bar, Priority.ALWAYS);//Set the layout to always scale the progress bar first
 			load_layout.getChildren().addAll(load_axis_label,load_bar,load_percent_label);//Load in order of axis label, progress bar, percent label
 			//Load Val format
-			load_val_format.setMaximumFractionDigits(2);//Set our load percentages to never show more than two digits after the decimal
-			load_val_format.setMinimumFractionDigits(2);//Set our load percentages to never show less that two digits after the decimal
-			load_val_format.setMinimumIntegerDigits(2);//Set our load percentages to never show less than two digits before the decimal
+			load_val_format.applyLocalizedPattern("00.00");//Set the pattern for the load percentages
 		}
 		
 		public void setAxis(String axis) {
@@ -142,3 +202,9 @@ public class LoadMeterViewer {
 		}
 	}
 }
+//Notes:
+
+//Another way of doing a pattern
+//load_val_format.setMaximumFractionDigits(2);//Set our load percentages to never show more than two digits after the decimal
+//load_val_format.setMinimumFractionDigits(2);//Set our load percentages to never show less that two digits after the decimal
+//load_val_format.setMinimumIntegerDigits(2);//Set our load percentages to never show less than two digits before the decimal
