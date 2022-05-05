@@ -1,0 +1,111 @@
+/**
+ * 
+ */
+package app;
+
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+
+/**
+ * @author ConnorSullivan31
+ *
+ */
+public class LoadMeterViewer {
+
+	private BorderPane load_meter_layout;//Main layout for this viewer
+	private Label load_meter_label;//Holds the title for the load meter panel in the top of the border pane
+	private VBox load_bar_layout;//Holds the layout for our load bars
+	private LoadMeter x_meter, y_meter, z_meter, s_meter;//Holds our load meter objects 
+	
+	public LoadMeterViewer() {
+		load_meter_layout = new BorderPane();//Create the border pane
+		load_meter_label = new Label();//Create the label
+		load_bar_layout = new VBox();//Create the layout for the load bars
+		x_meter = new LoadMeter();//Create the x-axis load meter
+		y_meter = new LoadMeter();//Create the y-axis load meter
+		z_meter = new LoadMeter();//Create the z-axis load meter
+		s_meter = new LoadMeter();//Create the spindle load meter
+		
+		setupViewer();//Init values
+	}
+	
+	public BorderPane getViewer() {
+		return load_meter_layout;//Return the main layout
+	}
+	
+	private void setupViewer() {
+		//Label
+		load_meter_label.setText("Load Monitoring (%)");
+		load_meter_layout.setTop(load_meter_label);//Put the label at the top
+		//Load Bar Values
+		x_meter.setAxis("X: ");//Label the axis
+		x_meter.setLoad(.50);//Set load to 50%
+		
+		y_meter.setAxis("Y: ");//Label the axis
+		y_meter.setLoad(.10);//Set load to 50%
+		
+		z_meter.setAxis("Z: ");//Label the axis
+		z_meter.setLoad(.25);//Set load to 50%
+		
+		s_meter.setAxis("S: ");//Label the axis
+		s_meter.setLoad(.90);//Set load to 50%
+		//Load Bar Layout
+		load_bar_layout.getChildren().addAll(x_meter.getLoadMeter(),y_meter.getLoadMeter(),z_meter.getLoadMeter(),s_meter.getLoadMeter());//Add the load bars to the layout. They will be displayed in the order they are added here.
+		load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
+	
+	}
+////////////////////////////////////////////
+//This class got big -- Maybe offload it to its own class in the future
+	private class LoadMeter {
+		private HBox load_layout;//Main layout for a load meter
+		private Label load_axis_label;//Holds the axis label for the load meter
+		private ProgressBar load_bar;//Holds the acutal load bar visual
+		private Label load_percent_label;//Holds the percent label at the end of the load bar
+		private int bar_height = 25;//Defines the height of the load bars
+		private double load_val = 0;//Holds value of the load bar - init to zero for now in case we forget to set the value later
+		private String axis_label = "N/A: ";//Holds the name for the load meter  - init to n/a in case we forget to set the value later
+		
+		public LoadMeter() {
+			load_layout = new HBox();//Create the layout
+			load_axis_label = new Label();//Create the label
+			load_bar = new ProgressBar();//Create the progress bar
+			load_percent_label = new Label();//Create the load percent label
+			
+			setupLoadMeter();//Init values
+		}
+		
+		public HBox getLoadMeter() {
+			return load_layout;//Return the main layout
+		}
+		
+		private void setupLoadMeter() {
+			//Label
+			load_axis_label.setText(axis_label);//Set the axis text to the value passed in through setAxis()
+			//Load Bar
+			load_bar.setPrefHeight(bar_height);//Set the preferred height of the progress bar
+			load_bar.setMaxSize(Double.MAX_VALUE, bar_height);//Set the progress bar to scale bigger if available
+			load_bar.setProgress(load_val);//Set how full the bar is
+			//Percent Label
+			load_percent_label.setText(" " + load_val*100 + "%");//Set the percent label at the end of the load bar
+			//Load Meter Layout
+			HBox.setHgrow(load_bar, Priority.ALWAYS);//Set the layout to always scale the progress bar first
+			load_layout.getChildren().addAll(load_axis_label,load_bar,load_percent_label);//Load in order of axis label, progress bar, percent label
+			
+		}
+		
+		public void setAxis(String axis) {
+			axis_label = axis;//Set the input text for the load meters axis label
+			load_axis_label.setText(axis);//Update the actual axis label
+		}
+		
+		public void setLoad(double load) {
+			load_val = load;//Set the load value of the progress bar
+			load_bar.setProgress(load_val);//Update the actual load bar
+		}
+	}
+}
