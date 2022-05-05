@@ -106,6 +106,7 @@ public class LoadMeterViewer {
 		public void setLoad(double load) {
 			load_val = load;//Set the load value of the progress bar
 			load_bar.setProgress(load_val);//Update the actual load bar
+			load_percent_label.setText(" " + load_val*100 + "%");//Update the percent label at the end of the load bar
 		}
 	}
 }
