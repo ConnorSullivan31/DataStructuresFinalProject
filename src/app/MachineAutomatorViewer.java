@@ -71,6 +71,7 @@ public class MachineAutomatorViewer {
 					automation_tasks.addTask(automator_display.getText());
 				}
 				automator_display.setText(automation_tasks.getMachineAutomation());//Load back in the stack
+				automator_display.setPromptText("");//Don't set prompt text if there are no items in the stack
 			}
 			
 		});//Will need to change this eventually to edit data

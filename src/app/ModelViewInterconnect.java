@@ -79,8 +79,7 @@ public class ModelViewInterconnect {
 	 */
 	public boolean addTask(String new_task) {
 		String temp;//Holds our new string that doesn't contain newlines
-		System.out.println(new_task);
-		temp = new_task.replaceAll("\\n", " ");
+		temp = new_task.replaceAll("\\n", " ");//Replace any newlines from the text box with a space
 		
 		try {
 		machine_tasks.push(">" + temp);//Add a new task
