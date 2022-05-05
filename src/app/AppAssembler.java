@@ -142,7 +142,9 @@ public class AppAssembler extends Application {
 			
 			HBox sb_button_layout = new HBox();//Layout for our buttons
 			Button sb_add_btn = new Button("+");
-			sb_add_btn.setOnAction(event -> System.out.println("Status Banner Add Button Pushed."));//Will need to change this eventually to edit data
+			sb_add_btn.setOnAction(event -> {
+				//add banner timer pause here
+			});//Will need to change this eventually to edit data
 			sb_add_btn.setPrefSize(64, 16);
 			Button sb_sub_btn = new Button("-");
 			sb_sub_btn.setOnAction(event -> System.out.println("Status Banner Sub Button Pushed."));//Will need to change this eventually to edit data
@@ -151,9 +153,13 @@ public class AppAssembler extends Application {
 			sb_button_layout.getChildren().addAll(sb_sub_btn, sb_add_btn);//Add the two buttons to the horizontal button layout. They will be displayed in the order they are added here.
 			status_banner_layout.setBottom(sb_button_layout);//Set the buttons to be displayed on the bottom of the border pane
 			
-			Timeline banner_timer = new Timeline(new KeyFrame(Duration.millis(3000), event -> test()));//This is our version of a timer
+			ModelViewInterconnect system_messages = new ModelViewInterconnect();//Object for our timer functionality
+			Timeline banner_timer = new Timeline(new KeyFrame(Duration.millis(3000), event -> {
+				status_banner_display.setText(system_messages.ManageSystemBanner());
+			}));//This is our version of a timer
 			banner_timer.setCycleCount(Animation.INDEFINITE);
-			banner_timer.play();
+			banner_timer.play();//Start Timer
+			//banner_timer.pause();//Pause Timer  --- Use this for our button
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
