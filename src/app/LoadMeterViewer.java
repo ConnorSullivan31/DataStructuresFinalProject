@@ -76,7 +76,12 @@ public class LoadMeterViewer {
 		//Load Bar Layout
 		load_bar_layout.getChildren().addAll(x_meter.getLoadMeter(),y_meter.getLoadMeter(),z_meter.getLoadMeter(),s_meter.getLoadMeter());//Add the load bars to the layout. They will be displayed in the order they are added here.
 		load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
-		//Randoms -- Add prev values here if we want them to all start from different values besides 0
+		//Randoms -- Add prev values here if we want them to all start from different values besides 0 -- looks more natural
+		x_prev = rand_generator.nextDouble();//Load an initial random value
+		y_prev = rand_generator.nextDouble();//Load an initial random value
+		z_prev = rand_generator.nextDouble();//Load an initial random value
+		s_prev = rand_generator.nextDouble();//Load an initial random value
+		
 		x_new = rand_generator.nextDouble();//Load an initial random value
 		y_new = rand_generator.nextDouble();//Load an initial random value
 		z_new = rand_generator.nextDouble();//Load an initial random value
