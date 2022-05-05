@@ -3,6 +3,12 @@
  */
 package app;
 
+import java.text.DecimalFormat;
+import java.util.Random;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
@@ -10,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * @author ConnorSullivan31
@@ -20,7 +27,11 @@ public class LoadMeterViewer {
 	private BorderPane load_meter_layout;//Main layout for this viewer
 	private Label load_meter_label;//Holds the title for the load meter panel in the top of the border pane
 	private VBox load_bar_layout;//Holds the layout for our load bars
-	private LoadMeter x_meter, y_meter, z_meter, s_meter;//Holds our load meter objects 
+	private LoadMeter x_meter, y_meter, z_meter, s_meter;//Holds our load meter objects
+
+	private Timeline load_timer;//Timer that dictates when messages should rotate
+	private double timer_interval = 500;//Set the timer interval to 50 milliseconds
+	private Random rand_generator;//Holds a random number for our load meters
 	
 	public LoadMeterViewer() {
 		load_meter_layout = new BorderPane();//Create the border pane
@@ -30,6 +41,13 @@ public class LoadMeterViewer {
 		y_meter = new LoadMeter();//Create the y-axis load meter
 		z_meter = new LoadMeter();//Create the z-axis load meter
 		s_meter = new LoadMeter();//Create the spindle load meter
+		
+		load_timer = new Timeline(new KeyFrame(Duration.millis(timer_interval), event -> {
+			//Add load code here
+			randomizeLoadValues();//Generate randomized load values every interval
+		}));//This is our version of a timer
+		
+		rand_generator = new Random();//Create our random number generator
 		
 		setupViewer();//Init values
 	}
@@ -57,8 +75,18 @@ public class LoadMeterViewer {
 		//Load Bar Layout
 		load_bar_layout.getChildren().addAll(x_meter.getLoadMeter(),y_meter.getLoadMeter(),z_meter.getLoadMeter(),s_meter.getLoadMeter());//Add the load bars to the layout. They will be displayed in the order they are added here.
 		load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
-	
+		//Timer
+		load_timer.setCycleCount(Animation.INDEFINITE);
+		load_timer.play();//Start Timer
 	}
+	
+	private void randomizeLoadValues() {
+		x_meter.setLoad(rand_generator.nextDouble());//Set load to random value
+		y_meter.setLoad(rand_generator.nextDouble());//Set load to random value
+	z_meter.setLoad(rand_generator.nextDouble());//Set load to random value
+		s_meter.setLoad(rand_generator.nextDouble());//Set load to random value
+	}
+	
 ////////////////////////////////////////////
 //This class got big -- Maybe offload it to its own class in the future
 	private class LoadMeter {
@@ -69,13 +97,14 @@ public class LoadMeterViewer {
 		private int bar_height = 25;//Defines the height of the load bars
 		private double load_val = 0;//Holds value of the load bar - init to zero for now in case we forget to set the value later
 		private String axis_label = "N/A: ";//Holds the name for the load meter  - init to n/a in case we forget to set the value later
+		private DecimalFormat load_val_format;//Clips our load vals to two decimal places
 		
 		public LoadMeter() {
 			load_layout = new HBox();//Create the layout
 			load_axis_label = new Label();//Create the label
 			load_bar = new ProgressBar();//Create the progress bar
 			load_percent_label = new Label();//Create the load percent label
-			
+			load_val_format = new DecimalFormat();//Create decimal format
 			setupLoadMeter();//Init values
 		}
 		
@@ -95,7 +124,10 @@ public class LoadMeterViewer {
 			//Load Meter Layout
 			HBox.setHgrow(load_bar, Priority.ALWAYS);//Set the layout to always scale the progress bar first
 			load_layout.getChildren().addAll(load_axis_label,load_bar,load_percent_label);//Load in order of axis label, progress bar, percent label
-			
+			//Load Val format
+			load_val_format.setMaximumFractionDigits(2);//Set our load percentages to never show more than two digits after the decimal
+			load_val_format.setMinimumFractionDigits(2);//Set our load percentages to never show less that two digits after the decimal
+			load_val_format.setMinimumIntegerDigits(2);//Set our load percentages to never show less than two digits before the decimal
 		}
 		
 		public void setAxis(String axis) {
@@ -106,7 +138,7 @@ public class LoadMeterViewer {
 		public void setLoad(double load) {
 			load_val = load;//Set the load value of the progress bar
 			load_bar.setProgress(load_val);//Update the actual load bar
-			load_percent_label.setText(" " + load_val*100 + "%");//Update the percent label at the end of the load bar
+			load_percent_label.setText(" " + load_val_format.format(load_val*100) + "%");//Update the percent label at the end of the load bar
 		}
 	}
 }
