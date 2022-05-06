@@ -28,6 +28,7 @@ public class StatusBannerViewer {
 	private ModelViewInterconnect system_messages_list;//Access the controller that will get the data from our circularly linked list class
 	private Timeline system_message_timer;//Timer that dictates when messages should rotate
 	private double timer_interval = 3000;//Set the timer interval to 3 seconds
+	private boolean is_editing;//Used to hold whether we are in edit mode
 	
 	 StatusBannerViewer() {//Note comments here don't pertain to allocating the memory but what each object will do - kind of
 		status_banner_layout = new BorderPane();//Create the layout for the machine status banner
@@ -40,6 +41,9 @@ public class StatusBannerViewer {
 		system_message_timer = new Timeline(new KeyFrame(Duration.millis(timer_interval), event -> {
 			status_banner_display.setText(system_messages_list.manageSystemBanner());//Display the next message - Called every 3 seconds
 		}));//This is our version of a timer
+		
+		is_editing = false;//Start out not in edit mode
+		
 		setupViewer();//Init the values for viewer
 	}
 	 
@@ -60,15 +64,42 @@ public class StatusBannerViewer {
 		//Buttons
 		add_button.setText("+");//Set the text for the add button
 		add_button.setOnAction(event -> {
-			//add banner timer pause here
-			System.out.println("Status Banner Add Button Pushed.");
+			//maybe add a timer pause here
+			/*if(system_messages_list.isRoom() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
+				is_editing = true;//Set that the user is now in edit mode
+				add_button.setText("Save");
+				sub_button.setText("Cancel");
+				status_banner_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
+				status_banner_display.setPromptText("Enter Task Here. . .");
+				status_banner_display.setEditable(true);//Allow the user to type data in the text field
+			}else if(is_editing) {
+				is_editing = false;//Turn of edit mode if the user clicks the save button while in edit mode
+				add_button.setText("+");//Reset Buttons
+				sub_button.setText("-");//Reset Buttons
+				status_banner_display.setEditable(false);//Disable editing of the field
+				if(status_banner_display.getText().length() > 0) {//Only add task if it is not empty
+					system_messages_list.addTask(status_banner_display.getText());
+				}
+				status_banner_display.setText(system_messages_list.getMachineAutomation());//Load back in the stack
+				status_banner_display.setPromptText("");//Don't set prompt text if there are no items in the stack
+			}*/
+			
 		});//Will need to change this eventually to edit data
 		add_button.setPrefSize(64, 16);
 		
 		sub_button.setText("-");//Set the text for the sub button
 		sub_button.setOnAction(event -> {
-			//Add remove system message here
-			System.out.println("Status Banner Sub Button Pushed.");//Debug
+			//maybe add more actions here
+			/*if(is_editing) {
+				is_editing = false;//Set that we wanted to cancel editing
+				add_button.setText("+");
+				sub_button.setText("-");
+				status_banner_display.setText(system_messages_list.getMachineAutomation());//Update the display of the current stack contents
+			}else {
+				system_messages_list.removeTask();//Remove the top task from the list
+				status_banner_display.setText(system_messages_list.getMachineAutomation());//Update the display of the current stack contents
+			}*/
+			
 		});//Will need to change this eventually to edit data
 		sub_button.setPrefSize(64, 16);
 		//Button Layout

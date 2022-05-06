@@ -58,6 +58,7 @@ public class ModelViewInterconnect {
 	 * @return
 	 */
 	public String getMachineAutomation() {
+		System.out.println(machine_tasks.dump());
 		return machine_tasks.dump();//Returns the whole stack separated by newlines
 	}
 	
