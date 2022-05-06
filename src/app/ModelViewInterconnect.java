@@ -26,7 +26,7 @@ public class ModelViewInterconnect {
 	
 	
 	
-	//////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//System Banner
 	private void loadSystemBanner() {
 		system_messages = new CircularLL<>();
@@ -40,7 +40,11 @@ public class ModelViewInterconnect {
 		//System.out.println(current_message);//Debug
 		return current_message;
 	}
-	//////////////////////////
+	
+	public void addMessage(String msg) {
+		
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Machine Automator
 	private void loadMachineAutomator() {
 		machine_tasks = new Stack();//Create the task stack
@@ -58,7 +62,7 @@ public class ModelViewInterconnect {
 	 * @return
 	 */
 	public String getMachineAutomation() {
-		System.out.println(machine_tasks.dump());
+		//System.out.println(machine_tasks.dump());//Debug
 		return machine_tasks.dump();//Returns the whole stack separated by newlines
 	}
 	
@@ -91,7 +95,7 @@ public class ModelViewInterconnect {
 	}
 	
 	/**
-	 * Returns true if there is room on the stack
+	 * Returns true if there is room on the stack - never actually used this functionality
 	 * @return
 	 */
 	public boolean isRoom() {
@@ -100,9 +104,9 @@ public class ModelViewInterconnect {
 		}
 		return true;//Return true if there is room for a new task
 	}
-	//////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Gcode Viewer
 	
-	//////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 }

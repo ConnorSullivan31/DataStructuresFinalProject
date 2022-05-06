@@ -45,6 +45,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 		iterative_node_addr.prev_node_address.next_node_address = iterative_node_addr.next_node_address;//Set the next link of the previous block the next link of the iterator block
 		iterative_node_addr.next_node_address.prev_node_address = iterative_node_addr.prev_node_address;//Set the next nodes previous link to point to the node before the iterator block
 		}
+		list_size--;//Decrement our list size by 1
 		//At this point, we should have deleted the current item since it is no longer referenced by either the block before it or the block behind it
 		//System.out.println("Delete: " + getCurrent());//Debug
 	}
@@ -97,18 +98,29 @@ public class CircularLL<T extends Comparable<? super T>> {
 		}
 		
 		//Returns the next node with valid data in the circularly linked list
-				public T getCurrent() {
-					if(list_size == 0) {
-						return null;//Return an empty string if our only node is the sentinal
-					}
+		public T getCurrent() {
+			if(list_size == 0) {
+				return null;//Return an empty string if our only node is the sentinal
+			}
 
-					if(iterative_node_addr == sentinel_node) {//If we're at the sentinal node, continue on to the next node
-						iterative_node_addr = iterative_node_addr.next_node_address;//Move to the next node
-					}
+			if(iterative_node_addr == sentinel_node) {//If we're at the sentinal node, continue on to the next node
+				iterative_node_addr = iterative_node_addr.next_node_address;//Move to the next node
+			}
 
-					return iterative_node_addr.node_data;//Return the next string data
-				}
+			return iterative_node_addr.node_data;//Return the next string data
+		}
 		
+		/**
+		 * Returns if linked list is empty
+		 * @return
+		 */
+		public boolean isEmpty() {
+			if(list_size == 0) {
+				return true;//Only the sentinal node exists
+			}
+			return false;//If size is greater than zero, then there are items in the list
+		}
+				
 		
 	private class Node {
 

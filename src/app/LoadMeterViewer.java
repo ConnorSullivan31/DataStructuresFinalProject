@@ -192,7 +192,7 @@ public class LoadMeterViewer {
 			HBox.setHgrow(load_bar, Priority.ALWAYS);//Set the layout to always scale the progress bar first
 			load_layout.getChildren().addAll(load_axis_label,load_bar,load_percent_label);//Load in order of axis label, progress bar, percent label
 			//Load Val format
-			load_val_format.applyLocalizedPattern("00.00");//Set the pattern for the load percentages
+			load_val_format.applyLocalizedPattern("00");//Set the pattern for the load percentages
 		}
 		
 		public void setAxis(String axis) {
