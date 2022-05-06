@@ -24,7 +24,7 @@ import javafx.util.Duration;
  */
 public class LoadMeterViewer {
 
-	private BorderPane load_meter_layout;//Main layout for this viewer
+	private BorderPane main_layout;//Main layout for this viewer
 	private Label load_meter_label;//Holds the title for the load meter panel in the top of the border pane
 	private VBox load_bar_layout;//Holds the layout for our load bars
 	private LoadMeter x_meter, y_meter, z_meter, s_meter;//Holds our load meter objects
@@ -35,7 +35,7 @@ public class LoadMeterViewer {
 	double x_prev = 0.0, x_new = 0.0, y_prev = 0.0, y_new = 0.0, z_prev = 0.0, z_new = 0.0, s_prev = 0.0, s_new = 0.0;//Placeholder values for bar fading
 	
 	public LoadMeterViewer() {
-		load_meter_layout = new BorderPane();//Create the border pane
+		main_layout = new BorderPane();//Create the border pane
 		load_meter_label = new Label();//Create the label
 		load_bar_layout = new VBox();//Create the layout for the load bars
 		x_meter = new LoadMeter();//Create the x-axis load meter
@@ -54,13 +54,13 @@ public class LoadMeterViewer {
 	}
 	
 	public BorderPane getViewer() {
-		return load_meter_layout;//Return the main layout
+		return main_layout;//Return the main layout
 	}
 	
 	private void setupViewer() {
 		//Label
 		load_meter_label.setText("Load Monitoring (%)");
-		load_meter_layout.setTop(load_meter_label);//Put the label at the top
+		main_layout.setTop(load_meter_label);//Put the label at the top
 		//Load Bar Values -- These will be wiped immediately - REMOVE THESE EVENTUALLY
 		x_meter.setAxis("X: ");//Label the axis
 		x_meter.setLoad(.50);//Set load to 50%
@@ -75,7 +75,7 @@ public class LoadMeterViewer {
 		s_meter.setLoad(.90);//Set load to 50%
 		//Load Bar Layout
 		load_bar_layout.getChildren().addAll(x_meter.getLoadMeter(),y_meter.getLoadMeter(),z_meter.getLoadMeter(),s_meter.getLoadMeter());//Add the load bars to the layout. They will be displayed in the order they are added here.
-		load_meter_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
+		main_layout.setBottom(load_bar_layout);//Set the buttons to be displayed on the bottom of the border pane
 		//Randoms -- Add prev values here if we want them to all start from different values besides 0 -- looks more natural
 		x_prev = rand_generator.nextDouble();//Load an initial random value
 		y_prev = rand_generator.nextDouble();//Load an initial random value

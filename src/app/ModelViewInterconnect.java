@@ -13,6 +13,7 @@ public class ModelViewInterconnect {
 	//Machine Automator
 	private Stack machine_tasks;//Used to hold the current automation tasks for the machine automator
 	//GCode Viewer
+	private MinHeap gcode_list;//Used to hold the gcode displayed in the gcode viewer
 	
 	/**
 	 * Ctor
@@ -20,6 +21,7 @@ public class ModelViewInterconnect {
 	public ModelViewInterconnect() {
 		loadSystemBanner();//Create and load memory for the system banner
 		loadMachineAutomator();//Create and load memory for the machine automator
+		loadGcodeData();//Create and load memory for the gcode viewer
 	}
 	
 	
@@ -33,12 +35,15 @@ public class ModelViewInterconnect {
 		system_messages.addItemImmediate("3:COOLANT LEVEL = HGIH");
 	}
 	
-	public String manageSystemBanner() {
+	public String importSystemBanner() {
 		return system_messages.getNext();
 	}
 	
 	public void addMessage(String msg) {
-		system_messages.addItemImmediate(msg);//Add a message to the linked list
+		String temp;//Holds our new string that doesn't contain newlines
+		temp = msg.replaceAll("\\n", " ");//Replace any newlines from the text box with a space
+		
+		system_messages.addItemImmediate(temp);//Add a message to the linked list
 	}
 	
 	public void removeMessage() {
@@ -69,7 +74,7 @@ public class ModelViewInterconnect {
 	 * Returns all of the data in the automation stack
 	 * @return
 	 */
-	public String getMachineAutomation() {
+	public String importMachineAutomation() {
 		//System.out.println(machine_tasks.dump());//Debug
 		return machine_tasks.dump();//Returns the whole stack separated by newlines
 	}
@@ -114,6 +119,55 @@ public class ModelViewInterconnect {
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Gcode Viewer
+	private void loadGcodeData() {
+		gcode_list = new MinHeap();//Create the heap for the gcode data
+		gcode_list.addItem(1,"Top Priority");//Dummy values
+		gcode_list.addItem(2,"Med Priority");
+		gcode_list.addItem(3,"Low Priority");
+	}
+	
+	public String importGcodeList() {
+		return gcode_list.dump();//Return the dumped data
+	}
+	
+	public boolean validatePriority(String data) {//Check if the user entered an integer
+		
+		if(data.matches("[1]?[0-9]?[0-9]")) {
+			return true;//Return true if we have a semi-valid number, will become fully valid in formulatePriority();
+		}
+		
+		return false;//return false if we didn't match the regex
+	}
+	
+	private int formulatePriority(String data) {
+		return Integer.parseInt(data);//Return the parsed data
+	}
+	
+	public void addGCode(String pri, String data) {
+		String temp;//Holds our new string that doesn't contain newlines
+		temp = data.replaceAll("\\n", " ");//Replace any newlines from the text box with a space
+		
+		try {
+		gcode_list.addItem(formulatePriority(pri), temp);//add the 
+		}catch(IndexOutOfBoundsException e) {
+			System.out.println("Error: " + e);//Probably don't need this printout -- probably remove later
+		}
+	}
+	
+	public void removeGCode() {
+		try {
+			gcode_list.pullMin();//We could return the return of this but we'll simply ignore the output for now
+		}catch (IndexOutOfBoundsException e) {
+			System.out.println("Error: " + e);//Probably don't need this printout -- probably remove later
+		}
+	}
+	
+	public boolean isRoomG() {
+		if(machine_tasks.isFull()) {
+			return false;
+		}
+		return true;//Return true if there is room for a new task
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	

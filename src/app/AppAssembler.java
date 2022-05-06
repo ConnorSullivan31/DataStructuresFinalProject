@@ -4,30 +4,13 @@
 package app;
 
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 //Testing Imports
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-//End Testing Imports
 import javafx.util.Duration;
 
 /**
@@ -37,6 +20,7 @@ import javafx.util.Duration;
 public class AppAssembler extends Application {
 
 	private Stage window;//Main window for our program
+	
 	private StatusBannerViewer status_banner_viewer;//Object what will generate the layout for the status bar
 	private GcodeViewer gcode_viewer;//Object that will generate the layout for the gcode viewer
 	private MachineAutomatorViewer automator_viewer;//Object that will generate the layout for the machine automator
@@ -60,7 +44,7 @@ public class AppAssembler extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//Creating these layouts has to be done in start because that is the main thread run by the gui.
 			//If we wanted to do something else with them outside of the start method we would have to use the runLater() functionality so that the task gets
 			//put into a queue that the gui thread will get to and manage as often as it can.
@@ -69,9 +53,8 @@ public class AppAssembler extends Application {
 			automator_viewer = new MachineAutomatorViewer();//Create the machine automator viewer
 			load_meter_viewer = new LoadMeterViewer();//Create the load meter viewer
 			/////End layout object mem alloction
-			
-			
-			
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 			window = primaryStage;//Create the window
 			window.setMinWidth(400);//Set the min width to 400 pixels
 			//This is the master layout and how we will arrange everything in our window
@@ -112,7 +95,6 @@ public class AppAssembler extends Application {
 			GridPane.setConstraints(load_meter_viewer.getViewer(), 0, 2);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
 			
 			
 			master_layout.getChildren().addAll(gcode_viewer.getViewer(),automator_viewer.getViewer(), status_banner_viewer.getViewer(), load_meter_viewer.getViewer());//Add all of the items to be displayed
