@@ -64,27 +64,28 @@ public class StatusBannerViewer {
 		//Buttons
 		add_button.setText("+");//Set the text for the add button
 		add_button.setOnAction(event -> {
-			//maybe add a timer pause here
-			/*if(automation_tasks.isRoom() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
+			if(is_editing == false) {//If there is room, go ahead with allowing the user to enter input
+				system_message_timer.pause();//Pause the timer
 				is_editing = true;//Set that the user is now in edit mode
 				add_button.setText("Save");
 				sub_button.setText("Cancel");
-				automator_display.requestFocus();//Request that we set the focus to this window
-				automator_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
-				automator_display.setPromptText("Enter Task Here. . .");
-				automator_display.setEditable(true);//Allow the user to type data in the text field
+				status_banner_display.requestFocus();//Request that we set the focus to this window
+				status_banner_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
+				status_banner_display.setPromptText("Enter Message Here. . .");
+				status_banner_display.setEditable(true);//Allow the user to type data in the text field
 			}else if(is_editing) {
+				system_message_timer.play();//Resume timer
 				is_editing = false;//Turn of edit mode if the user clicks the save button while in edit mode
 				add_button.setText("+");//Reset Buttons
 				sub_button.setText("-");//Reset Buttons
-				automator_display.setEditable(false);//Disable editing of the field
-				if(automator_display.getText().length() > 0) {//Only add task if it is not empty
-					automation_tasks.addTask(automator_display.getText());
+				status_banner_display.setEditable(false);//Disable editing of the field
+				if(status_banner_display.getText().length() > 0) {//Only add task if it is not empty
+					system_messages_list.addMessage(status_banner_display.getText());
 					//Call a save function here
 				}
-				automator_display.setText(automation_tasks.getMachineAutomation());//Load back in the stack
-				automator_display.setPromptText("");//Don't set prompt text if there are no items in the stack
-			}*/
+				status_banner_display.setText(system_messages_list.manageSystemBanner());//Load back in the linked list
+				status_banner_display.setPromptText("");//Don't set prompt text if there are no items in the linked list
+			}
 			
 		});//Will need to change this eventually to edit data
 		add_button.setPrefSize(64, 16);
@@ -92,16 +93,17 @@ public class StatusBannerViewer {
 		sub_button.setText("-");//Set the text for the sub button
 		sub_button.setOnAction(event -> {
 			//maybe add more actions here
-			/*if(is_editing) {
+			if(is_editing) {
+				system_message_timer.play();//Resume timer
 				is_editing = false;//Set that we wanted to cancel editing
 				add_button.setText("+");
 				sub_button.setText("-");
-				automator_display.setText(automation_tasks.getMachineAutomation());//Update the display of the current stack contents
+				status_banner_display.setText(system_messages_list.manageSystemBanner());//Update the display of the current stack contents
 			}else {
-				automation_tasks.removeTask();//Remove the top task from the list
-				automator_display.setText(automation_tasks.getMachineAutomation());//Update the display of the current stack contents
+				system_messages_list.removeMessage();//Remove the top task from the list
+				status_banner_display.setText(system_messages_list.manageSystemBanner());//Update the display of the current stack contents
 				//Call a save function here
-			}*/
+			}
 			
 		});//Will need to change this eventually to edit data
 		sub_button.setPrefSize(64, 16);

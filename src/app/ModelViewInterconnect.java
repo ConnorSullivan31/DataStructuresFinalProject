@@ -10,10 +10,8 @@ package app;
 public class ModelViewInterconnect {
 	//System Banner
 	private CircularLL<String> system_messages;//Used to hold messages for the system banner
-	private String current_message;//Used to hold current message in the system banner
 	//Machine Automator
 	private Stack machine_tasks;//Used to hold the current automation tasks for the machine automator
-	private String current_task;//Used to hold the current task at the top of the stack
 	//GCode Viewer
 	
 	/**
@@ -30,20 +28,30 @@ public class ModelViewInterconnect {
 	//System Banner
 	private void loadSystemBanner() {
 		system_messages = new CircularLL<>();
-		system_messages.addItem("POWER = ON");//Eventually replace these with file input
-		system_messages.addItem("OIL LEVEL = OK");
-		system_messages.addItem("COOLANT LEVEL = HGIH");
+		system_messages.addItemImmediate("1:POWER = ON");//Eventually replace these with file input
+		system_messages.addItemImmediate("2:OIL LEVEL = OK");
+		system_messages.addItemImmediate("3:COOLANT LEVEL = HGIH");
 	}
 	
 	public String manageSystemBanner() {
-		current_message = system_messages.getNext();
-		//System.out.println(current_message);//Debug
-		return current_message;
+		return system_messages.getNext();
 	}
 	
 	public void addMessage(String msg) {
-		
+		system_messages.addItemImmediate(msg);//Add a message to the linked list
 	}
+	
+	public void removeMessage() {
+		try {
+			system_messages.deleteCurrentItem();//Remove the current item
+		}catch(IndexOutOfBoundsException e) {
+			System.out.println("Error: " + e);//Probably remove this later but keep for now
+		}
+	}
+	
+	/*public boolean isEmpty() {
+		return system_messages.isEmpty();
+	}*/
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Machine Automator
 	private void loadMachineAutomator() {
@@ -72,7 +80,7 @@ public class ModelViewInterconnect {
 	public void removeTask() {
 		try {
 		machine_tasks.pop();//Remove the item on the top of the stack
-		}catch(IllegalArgumentException e) {
+		}catch(IndexOutOfBoundsException e) {
 			//System.out.println(e);//Debug
 		}
 	}
@@ -88,7 +96,7 @@ public class ModelViewInterconnect {
 		
 		try {
 		machine_tasks.push(">" + temp);//Add a new task
-		}catch(IllegalArgumentException e) {
+		}catch(IndexOutOfBoundsException e) {
 			return false;//Return false to the button that we cannot add more data
 		}
 		return true;//Return true if there is room for a new task
