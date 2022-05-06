@@ -59,6 +59,7 @@ public class MachineAutomatorViewer {
 				is_editing = true;//Set that the user is now in edit mode
 				add_button.setText("Save");
 				sub_button.setText("Cancel");
+				automator_display.requestFocus();//Request that we set the focus to this window
 				automator_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
 				automator_display.setPromptText("Enter Task Here. . .");
 				automator_display.setEditable(true);//Allow the user to type data in the text field
