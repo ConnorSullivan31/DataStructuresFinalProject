@@ -5,20 +5,21 @@ package app;
 
 /**
  * @author ConnorSullivan31
- *
+ *Structure of heap imitated from geeks for geeks min heap example
  */
 public class MinHeap {
 
 	private DataNode []heap;//Create our heap variable
-	private final int MAX_HEAP = 1024;//Set the max size of our heap
+	private final int MAX_HEAP = 1024, ROOT_INDEX = 1;//Set the max size of our heap and our root index position
 	private int size;//Holds the actual size of our heap
 	
 	/**
 	 * Ctor
 	 */
 	public MinHeap() {
-		heap = new DataNode[MAX_HEAP+1];//Create the new memory for our heap -- add one for the zero index that we dont count
-		size = 1;//Start out with an empty heap we don't use the first element in the array
+		heap = new DataNode[MAX_HEAP+1];//Create the new memory for our heap -- add one for the zero index that we dont count or access since it is always the max-min
+		size = 0;//Start out with an empty heap we don't use the first element in the array -- it is used as zero padding to prevent index out of bounds exceptions -- code would get way more complicated
+		heap[0].priority = Integer.MIN_VALUE;//Set the heap top to the minimum integer value possible
 	}
 	
 	public String dump() {//Dump the contents of the heap
@@ -26,171 +27,86 @@ public class MinHeap {
 		for(int i = 1; i < size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
 			temp += "[" + heap[i].priority + "] " + heap[i].node_data + "\n";//Add the data and then the newline
 		}
+		System.out.println(temp);//Debug
 		return temp;//Return the created data
 	}
 	
-	public DataNode getMin() throws IndexOutOfBoundsException{
-		if(size == 1 && heap[size] == null) {
-			throw new IndexOutOfBoundsException("Error: Heap is empty");
-		}
-		return heap[1];//Return the smallest element
-	}
-	
-	public void addItem(int pri, String data) throws IndexOutOfBoundsException{
-		DataNode temp = new DataNode(pri, data);//Used to hold the input data
-		if(size == MAX_HEAP + 1) {//if size is somehow greater than max heap throw an exception that we cannot add more data -- note offset of 1 to accommodate the extra space we saved for zero offset
-			throw new IndexOutOfBoundsException("Error: Heap is full");//Heap is full
-		}
-		heap[size++] = temp;//store the data in the next spot and increment size
-		percolate(size-1);//Sort out our heap -- subtract 1 since we just incremented for the next spot
-	}
-	
-	public DataNode pullMin() throws IndexOutOfBoundsException{
-		DataNode temp;//Used as a placeholder for the min value
-		if(size == 1 && heap[size] == null) {
-			throw new IndexOutOfBoundsException("Error: Heap is empty");
-		}
-		
-		temp = heap[1];//Save the min value
-		heapify(size-1);//Moves last item in heap to top, decrements size, and sorts it down -- use the minus one offset here since size is always 1 ahead for insertion
-		
-		return temp;//Return the min value
-	}
-	
-	private void percolate(int index) {
-		DataNode swap;//Used as a placeholder to swap the two nodes
-		if(heap[index].priority < getParentPriority(index)) {
-			//Upward traversal
-				swap = heap[index];//Save the parent
-				heap[index] = getParentNode(index);//Save the left child to the parent
-				setParentNode(index, swap);//Load in the saved parent value to the right child
-				index = moveUp(index);//Move up the tree
-		}else {
-			return;//We have the priority in the right order and no longer need to percolate as the current index is 
-		}
-		
-		percolate(index);//Call again -- move father up the heap
-	}
-	
-	private void heapify(int index) {
-		DataNode swap;//Used as a placeholder to swap two nodes
-		
-		if(index == size -1) {
-			heap[1] = heap[index];//Move the last item in the heap to the head position
-			heap[index] = null;//Clear(delete) the last node in the heap
-			size--;//Decrement our size of the heap
-			index = 1;//Set our index to 1 since we now need to start the top and work down
-		}
-		
-		System.out.println(index);
-		System.out.println(heap[index].priority);
-		if(heap[index].priority > getLeftPriority(index) && getLeftPriority(index) < getRightPriority(index)) {
-			//Right traversal
-			System.out.println("Right Traversal");
-			if(getRightNode(index) == null) {
-				return;//We are at the end of the heap
-			}
-			
-			if(heap[index].priority > getRightPriority(index)) {
-				swap = heap[index];//Save the parent
-				heap[index] = getRightNode(index);//Save the left child to the parent
-				setRightNode(index, swap);//Load in the saved parent value to the right child
-				index = moveRight(index);//Move the index to the right child
-			}
-		}else if(heap[index].priority > getRightPriority(index) && getRightPriority(index) < getLeftPriority(index)) {
-			//Left traversal
-			System.out.println("Left Traversal");
-			if(getLeftNode(index) == null) {
-				return;//We are at the end of the heap
-			}
-			
-			if(heap[index].priority > getLeftPriority(index)) {
-				swap = heap[index];//Save the parent
-				heap[index] = getLeftNode(index);//Save the left child to the parent
-				setLeftNode(index, swap);//Load in the saved parent value to the left child
-				index = moveLeft(index);//Move the index to the right child
-			}
-		}else {
-			return;//We have the priority in the right order or it is equal to the children below it
-		}//else
-				
-		
-		heapify(index);//Call again -- move farther down the heap
-	}
 	
 	
-	private int getParentPriority(int index) {
-		if(index <= 1) {
-			return heap[index].priority;//Return the priority at zero since thats where it would end if there's only one item
-		}
-		return heap[index/2].priority;//Returns the priority value of the parent
-	}
-	
-	private int getRightPriority(int index) {
-		return heap[2*index + 1].priority;//Returns the priority value of the right child
-	}
-	
-	private int getLeftPriority(int index) {
-		return heap[2*index].priority;//Returns the priority value of the left child
-	}
-	
-	
-	
-	
-	private DataNode getParentNode(int index) {
-		if(index <= 1) {
-			return heap[index];//Return the heap at zero since thats where it would end if there's only one item
-		}
-		return heap[index/2];//Returns the data node of the parent
-	}
-	
-	private DataNode getRightNode(int index) {
-		return heap[2*index + 1];//Returns the data node of the right child
-	}
-	
-	private DataNode getLeftNode(int index) {
-		return heap[2*index];//Returns the data node of the left child
-	}
-	
-	
-	
-	
-	private void setParentNode(int index, DataNode data) {
-		if(index <= 1) {
-			heap[index] = data;//Set the priority at zero since thats where it would end if theres only one item
-		}else {
-		heap[index/2] = data;//Sets the data node of the right child
-		}
-	}
-	
-	private void setRightNode(int index, DataNode data) {
-		heap[2*index + 1] = data;//Sets the data node of the right child
-	}
-	
-	private void setLeftNode(int index, DataNode data) {
-		heap[2*index] = data;//Sets the data node of the left child
-	}
-	
-	
-	
-	
-	private int moveUp(int index) {
-		if(index <= 1) {
-			return 0;//Return the index zero since thats where it would end if theres only one item
-		}
+	private int getParentIndex(int index) {
 		return (index/2);//Returns the index of the parent position
 	}
 	
-	private int moveRight(int index) {
+	private int getRightChildIndex(int index) {
 		return (2*index + 1);//Returns the index of the right child position
 	}
 	
-	private int moveLeft(int index) {
+	private int getLeftChildIndex(int index) {
 		return (2*index);//Returns the index of the left child position
 	}
 	
+	private boolean atLeaf(int index) {
+		//if our current index position is greater than the index position of its parent and the index position is less than or equal to size, then were are a leaf node
+		//[-9999,3,4,7,8,9,10,12];size = 7; -- is 4 leaf? -- no, index = 2 !> 7/2 -> 2 !> 3 -- is 9 leaf? -- yes, index = 5 > 7/2 -> 5 > 3//Example
+		if(index > (size / 2) && index <= size) {//First condition will only evaluate true if we are at a leaf node, second condition only ensures we don't go out of bounds for the heap
+			return true;//We are at a leaf node
+		}
+		return false;//Not at leaf node
+	}
 	
+	private void swapNodes(int index1, int index2) {
+		DataNode temp;//Used as a node placeholder
+		
+		temp = heap[index1];//Save first item
+		heap[index1] = heap[index2];//Move second item to first
+		heap[index2] = temp;//Load saved first item into the second item
+	}
 	
+	private void minHeapify(int index) {//Move a larger item at the root node downwards until it meets minheap requirements
+		//If we are going to heapify, we can only do so if we are not already at a node index
+		if(atLeaf(index) == false) {//This is the base case for our recursion
+			//If we are going to heapify, we only need to do so if the current index priority value is greater than either of its children, otherwise we are valid minheap and no need to move
+			if(heap[index].priority > heap[getLeftChildIndex(index)].priority || heap[index].priority > heap[getRightChildIndex(index)].priority) {
+				//If the left child is less than the right, then we choose to swap the left -- always pick the smaller of the two to move up and traverse that subtree
+				if(heap[getLeftChildIndex(index)].priority < heap[getRightChildIndex(index)].priority) {
+					swapNodes(index, getLeftChildIndex(index));//Swap the current node with its left child
+					minHeapify(getLeftChildIndex(index));//Recurse down the left subtree and make the comparison again
+				}else {
+					//If the right child is less than the left, then we choose to swap the right -- always pick the smaller of the two to move up and traverse that subtree'
+					if(heap[getRightChildIndex(index)].priority < heap[getLeftChildIndex(index)].priority) {
+						swapNodes(index, getRightChildIndex(index));//Swap the current node with its right child
+						minHeapify(getRightChildIndex(index));//Recurse down the right subtree and make the comparison again
+					}
+				}
+			}
+		}
+	}
+	
+	public void addItem(int priority, String data) throws IndexOutOfBoundsException{
+		if(size >= MAX_HEAP) {//Handle full heap
+			throw new IndexOutOfBoundsException("Error: Heap is full");//Indicate heap is full
+		}
+		
+		DataNode new_item = new DataNode(priority,data);//Create our new node with the data
+				
+		heap[++size] = new_item;//Increase the index/size of our heap and add the new node there
+		int temp_index = size;//Copy the current size to be used as an index for percolation
+		
+		//Percolate value up until it is greater than its less than its children but greater than its parent
+		while(heap[temp_index].priority < heap[getParentIndex(temp_index)].priority) {
+			swapNodes(temp_index, getParentIndex(temp_index));//Swap the child node at temp index with the parent node
+			temp_index = getParentIndex(temp_index);//Set our new index to the swapped nodes new position(parent position)
+		}
+				
+				
+	}
+	
+	public DataNode pullMin() {
+		DataNode min_node = heap[ROOT_INDEX];//Used to hold the minimum value of the heap -- found at the root index
+		heap[ROOT_INDEX] = heap[size--];//Set the root indexes new value to last node according to level order, then decrement the size of the heap
+		minHeapify(ROOT_INDEX);//Heapify our heap -- move the new item at the root index down to form a valid heap if needed
+		return min_node;//return the stored min node
+	}
 	
 	private class DataNode{
 		/**

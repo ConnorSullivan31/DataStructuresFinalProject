@@ -5,3 +5,5 @@ WARNING: DO NOT DEVELOP ON MASTER BRANCH
 -
 -
 Currently the name of my upstream github var is: GitServer
+
+Note: do not worry about line fold over on long strings. This is how a word processor would work. It is not a bug. Also, at least the queue, it states text is single line.
