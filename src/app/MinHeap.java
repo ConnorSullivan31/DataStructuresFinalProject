@@ -19,19 +19,8 @@ public class MinHeap {
 	public MinHeap() {
 		heap = new DataNode[MAX_HEAP+1];//Create the new memory for our heap -- add one for the zero index that we dont count or access since it is always the max-min
 		size = 0;//Start out with an empty heap we don't use the first element in the array -- it is used as zero padding to prevent index out of bounds exceptions -- code would get way more complicated
-		heap[0].priority = Integer.MIN_VALUE;//Set the heap top to the minimum integer value possible
+		heap[0] = new DataNode(Integer.MIN_VALUE, null);//Set the heap top to the minimum integer value possible with null data
 	}
-	
-	public String dump() {//Dump the contents of the heap
-		String temp = "";//Used to hold the heaps contents
-		for(int i = 1; i < size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
-			temp += "[" + heap[i].priority + "] " + heap[i].node_data + "\n";//Add the data and then the newline
-		}
-		System.out.println(temp);//Debug
-		return temp;//Return the created data
-	}
-	
-	
 	
 	private int getParentIndex(int index) {
 		return (index/2);//Returns the index of the parent position
@@ -90,7 +79,7 @@ public class MinHeap {
 		DataNode new_item = new DataNode(priority,data);//Create our new node with the data
 				
 		heap[++size] = new_item;//Increase the index/size of our heap and add the new node there
-		int temp_index = size;//Copy the current size to be used as an index for percolation
+		int temp_index = size;//Copy the current size to be used as an index for percolation as this is where the new element was inserted
 		
 		//Percolate value up until it is greater than its less than its children but greater than its parent
 		while(heap[temp_index].priority < heap[getParentIndex(temp_index)].priority) {
@@ -101,11 +90,25 @@ public class MinHeap {
 				
 	}
 	
-	public DataNode pullMin() {
+	public String peekMin() {
+		if(size == 0) {
+			//System.out.println("peek0");//Debug
+			return "";//Return an empty string if heap is empty
+		}
+		DataNode min_node = heap[ROOT_INDEX];//Used to hold the minimum value of the heap -- found at the root index
+		return ("[" + min_node.priority + "] " + min_node.node_data);//return the stored min node -- specifically formatted for this assignment
+	}
+	
+	public String pullMin(){
+		if(size == 0) {
+			System.out.println("pull0");
+			return "";//Return an empty string if the heap if empty
+		}
+		//System.out.println(size);//Debug
 		DataNode min_node = heap[ROOT_INDEX];//Used to hold the minimum value of the heap -- found at the root index
 		heap[ROOT_INDEX] = heap[size--];//Set the root indexes new value to last node according to level order, then decrement the size of the heap
 		minHeapify(ROOT_INDEX);//Heapify our heap -- move the new item at the root index down to form a valid heap if needed
-		return min_node;//return the stored min node
+		return ("[" + min_node.priority + "] " + min_node.node_data);//return the stored min node -- specifically formatted for this assignment
 	}
 	
 	private class DataNode{
@@ -122,3 +125,18 @@ public class MinHeap {
 	}
 	
 }
+
+//Notes:
+//Debug
+	/*private String dump() {//Dump the contents of the heap
+		String temp = "";//Used to hold the heaps contents
+		for(int i = 1; i < size/2; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
+			temp += " PARENT : " + heap[i].node_data
+	                + " LEFT CHILD : " + heap[getLeftChildIndex(i)].node_data
+	                        + " RIGHT CHILD :" + heap[getRightChildIndex(i)].node_data + "\n";//Add the data and then the newline
+		}
+		System.out.println(temp);//Debug
+		return temp;//Return the created data
+	}*/
+
+

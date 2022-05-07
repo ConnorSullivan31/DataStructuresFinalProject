@@ -14,7 +14,7 @@ public class ModelViewInterconnect {
 	private Stack machine_tasks;//Used to hold the current automation tasks for the machine automator
 	//GCode Viewer
 	private MinHeap gcode_list;//Used to hold the gcode displayed in the gcode viewer
-	
+	private String completed_instructions = "";//Holds the gcode that has been pulled from the min heap
 	/**
 	 * Ctor
 	 */
@@ -135,21 +135,23 @@ public class ModelViewInterconnect {
 	private void loadGcodeData() {
 		gcode_list = new MinHeap();//Create the heap for the gcode data
 		gcode_list.addItem(6,"6th Priority");
+		gcode_list.addItem(20,"20th Priority");
 		gcode_list.addItem(5,"5th Priority");//Dummy values
 		gcode_list.addItem(4,"4th Priority");
 		gcode_list.addItem(1,"Top Priority");
 		gcode_list.addItem(2,"Med Priority");
 		gcode_list.addItem(3,"Low Priority");
+		gcode_list.addItem(8,"8th Priority");
 	}
 	
 	public String importGcodeList() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
 		String temp;//Used to hold the data dumped by the heap
-		temp = gcode_list.dump();//Save the dumped data
-		if(temp == "") {
+		temp = gcode_list.peekMin();//Save the dumped data
+		if(temp == "") {//pullMin() and peekMin() return an empty string if the heap is empty -- made it this way as its easier to interface with TextAreas -- no need for exceptions here either
 			return ">[EMPTY]";
 		}
 		
-		return ">" + temp;//Return the dumped data with an arrow indicator for the top priority item
+		return temp;//Return the dumped data with an arrow indicator for the top priority item
 	}
 	
 	public boolean validatePriority(String data) {//Check if the user entered an integer
@@ -181,11 +183,8 @@ public class ModelViewInterconnect {
 	}
 	
 	public void removeGCode() {
-		try {
+			//Returns an empty string if the size of the heap is zero -- No exceptions are needed because of the return
 			gcode_list.pullMin();//We could return the return of this but we'll simply ignore the output for now
-		}catch (IndexOutOfBoundsException e) {
-			System.out.println("Error: " + e);//Probably don't need this printout -- probably remove later
-		}
 	}
 	
 	public boolean isRoomG() {
