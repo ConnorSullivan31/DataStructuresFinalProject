@@ -24,7 +24,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 		sentinel_node.next_node_address = sentinel_node;//Link the sentinel node to itself
 		sentinel_node.prev_node_address = sentinel_node;//Link the sentinel node to itself
 		iterative_node_addr = sentinel_node;
-		list_size = 0;// Don't count sentinels, otherwise count would be up by 2
+		list_size = 0;// Don't count sentinels, otherwise count would be up by 1
 	}
 
 	/**

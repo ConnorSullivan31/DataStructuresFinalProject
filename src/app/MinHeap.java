@@ -24,7 +24,7 @@ public class MinHeap {
 	public String dump() {//Dump the contents of the heap
 		String temp = "";//Used to hold the heaps contents
 		for(int i = 1; i < size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
-			temp += heap[i].node_data + "\n";//Add the data and then the newline
+			temp += "[" + heap[i].priority + "] " + heap[i].node_data + "\n";//Add the data and then the newline
 		}
 		return temp;//Return the created data
 	}
@@ -81,8 +81,18 @@ public class MinHeap {
 			size--;//Decrement our size of the heap
 		}
 		
+		if(index == 1) {
+			return;//We have an empty heap
+		}
+		
+		
 		if(heap[index].priority > getLeftPriority(index) && getLeftPriority(index) < getRightPriority(index)) {
 			//Right traversal
+			
+			if(getRightNode(index) == null) {
+				return;//We are at the end of the heap
+			}
+			
 			if(heap[index].priority > getRightPriority(index)) {
 				swap = heap[index];//Save the parent
 				heap[index] = getRightNode(index);//Save the left child to the parent
@@ -91,6 +101,10 @@ public class MinHeap {
 			}
 		}else if(heap[index].priority > getRightPriority(index) && getRightPriority(index) < getLeftPriority(index)) {
 			//Left traversal
+			if(getLeftNode(index) == null) {
+				return;//We are at the end of the heap
+			}
+			
 			if(heap[index].priority > getLeftPriority(index)) {
 				swap = heap[index];//Save the parent
 				heap[index] = getLeftNode(index);//Save the left child to the parent
@@ -99,12 +113,11 @@ public class MinHeap {
 			}
 		}else {
 			return;//We have the priority in the right order or it is equal to the children below it
-		}
+		}//else
 				
+		
 		heapify(index);//Call again -- move farther down the heap
 	}
-	
-	
 	
 	
 	private int getParentPriority(int index) {

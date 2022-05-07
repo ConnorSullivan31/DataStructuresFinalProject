@@ -36,7 +36,14 @@ public class ModelViewInterconnect {
 	}
 	
 	public String importSystemBanner() {
-		return system_messages.getNext();
+		String temp;//Used to hold the next status message
+		temp = system_messages.getNext();//Get the next message
+		
+		if(temp == null) {//Check if the list is empty -- We have to check for null here because of how we implemented our linked list, we can check for an empty string "" on the other two structure that have a dump feature
+			return "[EMPTY]";//Return that our message list is empty
+		}
+		
+		return temp;//Return the next message in the list
 	}
 	
 	public void addMessage(String msg) {
@@ -75,8 +82,14 @@ public class ModelViewInterconnect {
 	 * @return
 	 */
 	public String importMachineAutomation() {
-		//System.out.println(machine_tasks.dump());//Debug
-		return machine_tasks.dump();//Returns the whole stack separated by newlines
+		String temp;//Used to hold the imported data
+		temp = machine_tasks.dump();//Returns the whole stack separated by newlines
+		
+		if(machine_tasks.dump() == "") {
+			return ">[EMPTY]";//If there is nothing in the stack return empty as the data
+		}
+		
+		return temp;
 	}
 	
 	/**
@@ -126,8 +139,14 @@ public class ModelViewInterconnect {
 		gcode_list.addItem(3,"Low Priority");
 	}
 	
-	public String importGcodeList() {
-		return gcode_list.dump();//Return the dumped data
+	public String importGcodeList() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
+		String temp;//Used to hold the data dumped by the heap
+		temp = gcode_list.dump();//Save the dumped data
+		if(temp == "") {
+			return ">[EMPTY]";
+		}
+		
+		return ">" + temp;//Return the dumped data with an arrow indicator for the top priority item
 	}
 	
 	public boolean validatePriority(String data) {//Check if the user entered an integer
