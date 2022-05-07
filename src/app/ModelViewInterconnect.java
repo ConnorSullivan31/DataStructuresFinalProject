@@ -183,8 +183,19 @@ public class ModelViewInterconnect {
 	}
 	
 	public void removeGCode() {
-			//Returns an empty string if the size of the heap is zero -- No exceptions are needed because of the return
-			gcode_list.pullMin();//We could return the return of this but we'll simply ignore the output for now
+		String temp;//Used to hold the result of pull min	
+		//Returns an empty string if the size of the heap is zero -- No exceptions are needed because of the return
+			temp = gcode_list.pullMin();//Pull the top value off the heap -- gets stored it to temp
+			if(temp != "") {
+				completed_instructions +=temp + "\n";//Add the pulled gcode to completed instructions for later display
+			}
+	}
+	
+	public String importCompletedCode() {
+		if(completed_instructions == "") {
+			return "[EMPTY]";//Indicate empty
+		}
+		return completed_instructions;//Return the gcode pulled from min heap
 	}
 	
 	public boolean isRoomG() {

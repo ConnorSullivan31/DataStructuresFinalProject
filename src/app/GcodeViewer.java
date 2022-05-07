@@ -23,6 +23,8 @@ public class GcodeViewer {
 	private TextArea gcode_display;//Holds the viewing ouptut area for the gcode
 	private Label gcode_viewer_label;//Holds the label for the gcode in edit mode
 	private TextArea priority_display;//Appears when the user adds a new entry so they can enter priority
+	private TextArea completed_display;//Holds all of the gcode that has been pulled off of the min heap
+	private Label completed_label;//Holds the title for the completed gcode display
 	private HBox button_layout;//Holds the layout for our buttons
 	private Button add_button, sub_button;//Plus and minus buttons for the gcode viewer
 	private ModelViewInterconnect gcode_data;//Used to interface with the min heap priority queue for the gcode
@@ -38,6 +40,8 @@ public class GcodeViewer {
 		button_layout = new HBox();//Create the button layout
 		add_button = new Button();//Create the add button
 		sub_button = new Button();//Create the sub button
+		completed_display = new TextArea();//Create the text area
+		completed_label = new Label();//Create the label
 		
 		gcode_data = new ModelViewInterconnect();//Create the controller interconnect
 		is_editing = false;//Start out with the user not editing data
@@ -61,7 +65,7 @@ public class GcodeViewer {
 		gcode_viewer_label.setText("Enter G-Code");
 		//TextArea -- Gcode data
 		gcode_display.setText(gcode_data.importGcodeList());
-		gcode_display.setPrefSize(200,200);//Set the size of this area
+		gcode_display.setPrefSize(200,50);//Set the size of this area
 		gcode_display.setWrapText(true);
 		gcode_display.setEditable(false);
 		//Layout -- Holds the priority text field, the gcode edit label, and the gcode field
@@ -77,7 +81,16 @@ public class GcodeViewer {
 		sub_button.setPrefSize(64, 16);
 		//Button Layout
 		button_layout.getChildren().addAll(add_button, sub_button);//Add the two buttons to the horizontal button layout. They will be displayed in the order they are added here.
-		main_layout.setBottom(button_layout);//Set the buttons to be displayed on the bottom of the border pane
+		gcode_view_layout.getChildren().add(button_layout);//Set the buttons to be displayed on the bottom of the vbox
+		//Label
+		completed_label.setText("Completed G-Code");
+		gcode_view_layout.getChildren().add(completed_label);//Add the label to the display under the buttons
+		//Text Area -- Completed gcode display
+		completed_display.setText(gcode_data.importCompletedCode());
+		completed_display.setPrefSize(200,150);//Set the size of this area
+		completed_display.setWrapText(true);
+		completed_display.setEditable(false);
+		main_layout.setBottom(completed_display);//Set the buttons to be displayed on the bottom of the border pane
 	}
 	
 	private void respondToAddButton() {
@@ -88,7 +101,7 @@ public class GcodeViewer {
 			sub_button.setText("Cancel");
 			viewer_label.setText("Set G-Code Priority");//Change the top label to label the priority text field
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().addAll(priority_display,gcode_viewer_label,gcode_display);//Add the priority text field, the gcode label, and the gcode display to the vbox layout in that order
+			gcode_view_layout.getChildren().addAll(priority_display,gcode_viewer_label,gcode_display,button_layout,completed_label);//Add the priority text field, the gcode label, the gcode display, the button layout, and the completed label to the vbox layout in that order
 			
 			priority_display.requestFocus();//Request that we set the focus to this window
 			priority_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
@@ -104,7 +117,7 @@ public class GcodeViewer {
 			sub_button.setText("-");//Reset Buttons
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().add(gcode_display);//Add the gcode display to the vbox layout
+			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setEditable(false);//Disable editing of the field
 			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0) {//Only add if priority and gcode are both filled out
 				if(gcode_data.validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
@@ -126,12 +139,13 @@ public class GcodeViewer {
 			sub_button.setText("-");
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().add(gcode_display);//Add the gcode display to the vbox layout
+			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
 		}else {
 			//System.out.println("Button pushed");//Debug
 			gcode_data.removeGCode();//Remove the top task from the list
 			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
+			completed_display.setText(gcode_data.importCompletedCode());//Update the display of the already pulled heap contents
 			//Call a save function here
 		}
 	}	
