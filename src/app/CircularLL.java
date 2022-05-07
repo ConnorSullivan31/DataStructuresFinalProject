@@ -50,7 +50,15 @@ public class CircularLL<T extends Comparable<? super T>> {
 		
 		list_size--;//Decrement our list size by 1
 		//At this point, we should have deleted the current item since it is no longer referenced by either the block before it or the block behind it
-		//System.out.println("Delete: " + getCurrent());//Debug
+		
+		if(list_size == 0) {//Relink the sentinal node back to itself
+			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
+			sentinel_node.next_node_address = sentinel_node;
+			sentinel_node.prev_node_address = sentinel_node;
+			iterative_node_addr = sentinel_node;//Put the iterator back at the sentinal node
+			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
+		}
+		
 	}
 
 
@@ -90,7 +98,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 			if(iterative_node_addr == sentinel_node) {//If we're at the sentinal node, continue on to the next node
 				getNext();//Call function again until we get non-null data
 			}
-
+			//dump();//Debug
 			return iterative_node_addr.node_data;//Return the next string data
 		}
 	
@@ -133,6 +141,21 @@ public class CircularLL<T extends Comparable<? super T>> {
 			}
 			return false;//If size is greater than zero, then there are items in the list
 		}*/
+		
+		private String dumpMemory() {//Used for debugging
+			String temp = "";
+			Node loc_it;
+			loc_it = sentinel_node;
+			loc_it = sentinel_node.next_node_address;
+			while(loc_it != sentinel_node) {
+				temp += loc_it.node_data+ "(" + loc_it +" : "+ loc_it.next_node_address + "," + loc_it.prev_node_address + ")" + "\n";
+				loc_it = loc_it.next_node_address;
+			}
+			//System.out.println(temp);//Debug
+			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
+			return temp;
+			
+		}
 				
 		
 	private class Node {
