@@ -150,8 +150,9 @@ public class ModelViewInterconnect {
 	}
 	
 	public boolean validatePriority(String data) {//Check if the user entered an integer
-		
-		if(data.matches("[1]?[0-9]?[0-9]")) {
+		String temp;//Will hold our new string that doesnt contain any newlines or spaces
+		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
+		if(temp.matches("[1]?[0-9]?[0-9]")) {
 			return true;//Return true if we have a semi-valid number, will become fully valid in formulatePriority();
 		}
 		
@@ -159,7 +160,9 @@ public class ModelViewInterconnect {
 	}
 	
 	private int formulatePriority(String data) {
-		return Integer.parseInt(data);//Return the parsed data
+		String temp;//Will hold our new string that doesnt contain any newlines or spaces
+		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
+		return Integer.parseInt(temp);//Return the parsed data
 	}
 	
 	public void addGCode(String pri, String data) {
