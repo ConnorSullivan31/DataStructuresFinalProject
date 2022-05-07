@@ -52,7 +52,7 @@ public class MinHeap {
 		}
 		
 		temp = heap[1];//Save the min value
-		heapify(size -1);//Moves last item in heap to top, decrements size, and sorts it down -- use the minus one offset here since size is always 1 ahead for insertion
+		heapify(size-1);//Moves last item in heap to top, decrements size, and sorts it down -- use the minus one offset here since size is always 1 ahead for insertion
 		
 		return temp;//Return the min value
 	}
@@ -79,16 +79,14 @@ public class MinHeap {
 			heap[1] = heap[index];//Move the last item in the heap to the head position
 			heap[index] = null;//Clear(delete) the last node in the heap
 			size--;//Decrement our size of the heap
-		}
-		
-		if(index == 1) {
-			return;//We have an empty heap
+			index = 1;//Set our index to 1 since we now need to start the top and work down
 		}
 		
 		System.out.println(index);
+		System.out.println(heap[index].priority);
 		if(heap[index].priority > getLeftPriority(index) && getLeftPriority(index) < getRightPriority(index)) {
 			//Right traversal
-			
+			System.out.println("Right Traversal");
 			if(getRightNode(index) == null) {
 				return;//We are at the end of the heap
 			}
@@ -101,6 +99,7 @@ public class MinHeap {
 			}
 		}else if(heap[index].priority > getRightPriority(index) && getRightPriority(index) < getLeftPriority(index)) {
 			//Left traversal
+			System.out.println("Left Traversal");
 			if(getLeftNode(index) == null) {
 				return;//We are at the end of the heap
 			}

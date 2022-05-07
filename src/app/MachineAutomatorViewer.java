@@ -74,6 +74,7 @@ public class MachineAutomatorViewer {
 			is_editing = true;//Set that the user is now in edit mode
 			add_button.setText("Save");
 			sub_button.setText("Cancel");
+			automator_viewer_label.setText("Enter Automation Task");
 			automator_display.requestFocus();//Request that we set the focus to this window
 			automator_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
 			automator_display.setPromptText("Enter Task Here. . .");
@@ -82,6 +83,7 @@ public class MachineAutomatorViewer {
 			is_editing = false;//Turn of edit mode if the user clicks the save button while in edit mode
 			add_button.setText("+");//Reset Buttons
 			sub_button.setText("-");//Reset Buttons
+			automator_viewer_label.setText("Automator Tasks");
 			automator_display.setEditable(false);//Disable editing of the field
 			if(automator_display.getText().length() > 0) {//Only add task if it is not empty
 				automation_tasks.addTask(automator_display.getText());
@@ -99,6 +101,7 @@ public class MachineAutomatorViewer {
 			is_editing = false;//Set that we wanted to cancel editing
 			add_button.setText("+");
 			sub_button.setText("-");
+			automator_viewer_label.setText("Automator Tasks");
 			automator_display.setText(automation_tasks.importMachineAutomation());//Update the display of the current stack contents
 		}else {
 			automation_tasks.removeTask();//Remove the top task from the list

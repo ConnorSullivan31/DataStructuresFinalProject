@@ -83,6 +83,7 @@ public class StatusBannerViewer {
 			is_editing = true;//Set that the user is now in edit mode
 			add_button.setText("Save");
 			sub_button.setText("Cancel");
+			status_banner_label.setText("Enter Status Message");
 			status_banner_display.requestFocus();//Request that we set the focus to this window
 			status_banner_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
 			status_banner_display.setPromptText("Enter Message Here. . .");
@@ -92,6 +93,7 @@ public class StatusBannerViewer {
 			is_editing = false;//Turn of edit mode if the user clicks the save button while in edit mode
 			add_button.setText("+");//Reset Buttons
 			sub_button.setText("-");//Reset Buttons
+			status_banner_label.setText("Machine Status");
 			status_banner_display.setEditable(false);//Disable editing of the field
 			if(status_banner_display.getText().length() > 0) {//Only add task if it is not empty
 				system_messages_list.addMessage(status_banner_display.getText());
@@ -110,6 +112,7 @@ public class StatusBannerViewer {
 			is_editing = false;//Set that we wanted to cancel editing
 			add_button.setText("+");
 			sub_button.setText("-");
+			status_banner_label.setText("Machine Status");
 			status_banner_display.setText(system_messages_list.importSystemBanner());//Update the display of the current stack contents
 		}else {
 			system_messages_list.removeMessage();//Remove the top task from the list

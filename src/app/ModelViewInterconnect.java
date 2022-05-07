@@ -134,9 +134,9 @@ public class ModelViewInterconnect {
 	//Gcode Viewer
 	private void loadGcodeData() {
 		gcode_list = new MinHeap();//Create the heap for the gcode data
+		gcode_list.addItem(3,"Low Priority");
 		gcode_list.addItem(1,"Top Priority");//Dummy values
 		gcode_list.addItem(2,"Med Priority");
-		gcode_list.addItem(3,"Low Priority");
 	}
 	
 	public String importGcodeList() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
