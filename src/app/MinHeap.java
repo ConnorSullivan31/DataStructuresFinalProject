@@ -85,7 +85,7 @@ public class MinHeap {
 			return;//We have an empty heap
 		}
 		
-		
+		System.out.println(index);
 		if(heap[index].priority > getLeftPriority(index) && getLeftPriority(index) < getRightPriority(index)) {
 			//Right traversal
 			

@@ -51,11 +51,11 @@ public class CircularLL<T extends Comparable<? super T>> {
 		list_size--;//Decrement our list size by 1
 		//At this point, we should have deleted the current item since it is no longer referenced by either the block before it or the block behind it
 		
-		if(list_size == 0) {//Relink the sentinal node back to itself
+		if(list_size == 0) {//Relink the sentinal node back to itself if it is the only item in the list -- we need to do this for add to work correctly
 			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
 			sentinel_node.next_node_address = sentinel_node;
 			sentinel_node.prev_node_address = sentinel_node;
-			iterative_node_addr = sentinel_node;//Put the iterator back at the sentinal node
+			iterative_node_addr = sentinel_node;//Put the iterator back at the sentinal node -- we need to do this for our gets to work correctly
 			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
 		}
 		

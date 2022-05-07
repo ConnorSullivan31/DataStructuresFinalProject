@@ -129,6 +129,7 @@ public class GcodeViewer {
 			gcode_view_layout.getChildren().add(gcode_display);//Add the gcode display to the vbox layout
 			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
 		}else {
+			System.out.println("Button pushed");
 			gcode_data.removeGCode();//Remove the top task from the list
 			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
 			//Call a save function here
