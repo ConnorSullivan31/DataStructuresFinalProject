@@ -95,14 +95,24 @@ public class LoadMeterViewer {
 
 		//Random X fading
 		if(x_prev < x_new) {
-			x_prev += .01;//Increment the old value
 			x_meter.setLoad(x_prev);//Update the load meter
+			x_prev += .01;//Increment the old value -- do after to ensure no overflow
+			
+			if(x_prev > 1.0) {
+				x_prev = 1.0;//If we are over 1.0, cap it back to one
+			}
+			
 			if(x_prev >= x_new) {
 				x_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}else if(x_prev > x_new) {
-			x_prev -= .01;//Decrement the old value
 			x_meter.setLoad(x_prev);//Update the load meter
+			x_prev -= .01;//Decrement the old value -- do after to ensure no overflow
+			
+			if(x_prev < 0.0) {
+				x_prev = 0.0;//If we are under 0.0, cap it back to zero
+			}
+			
 			if(x_prev <= x_new) {
 				x_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
@@ -110,47 +120,79 @@ public class LoadMeterViewer {
 		
 		//Random Y fading
 		if(y_prev < y_new) {
-			y_prev += .01;//Increment the old value
 			y_meter.setLoad(y_prev);//Update the load meter
+			y_prev += .01;//Increment the old value -- do after to ensure no overflow
+			
+			if(y_prev > 1.0) {
+				y_prev = 1.0;//If we are over 1.0, cap it back to one
+			}
+			
 			if(y_prev >= y_new) {
 				y_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}else if(y_prev > y_new) {
-			y_prev -= .01;//Decrement the old value
 			y_meter.setLoad(y_prev);//Update the load meter
+			y_prev -= .01;//Decrement the old value -- do after to ensure no overflow
+			
+			if(y_prev < 0.0) {
+				y_prev = 0.0;//If we are under 0.0, cap it back to zero
+			}
+			
 			if(y_prev <= y_new) {
 				y_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}
-		
+
 		//Random Z fading
 		if(z_prev < z_new) {
-			z_prev += .01;//Increment the old value
 			z_meter.setLoad(z_prev);//Update the load meter
+			z_prev += .01;//Increment the old value -- do after to ensure no overflow
+			
+			if(z_prev > 1.0) {
+				z_prev = 1.0;//If we are over 1.0, cap it back to one
+			}
+			
 			if(z_prev >= z_new) {
 				z_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}else if(z_prev > z_new) {
-			z_prev -= .01;//Decrement the old value
 			z_meter.setLoad(z_prev);//Update the load meter
+			z_prev -= .01;//Decrement the old value -- do after to ensure no overflow
+			
+			if(z_prev < 0.0) {
+				z_prev = 0.0;//If we are under 0.0, cap it back to zero
+			}
+			
 			if(z_prev <= z_new) {
 				z_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}
+
 		//Random S fading
 		if(s_prev < s_new) {
-			s_prev += .01;//Increment the old value
 			s_meter.setLoad(s_prev);//Update the load meter
+			s_prev += .01;//Increment the old value -- do after to ensure no overflow
+			
+			if(s_prev > 1.0) {
+				s_prev = 1.0;//If we are over 1.0, cap it back to one
+			}
+			
 			if(s_prev >= s_new) {
 				s_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}else if(s_prev > s_new) {
-			s_prev -= .01;//Decrement the old value
 			s_meter.setLoad(s_prev);//Update the load meter
+			s_prev -= .01;//Decrement the old value -- do after to ensure no overflow
+			
+			if(s_prev < 0.0) {
+				s_prev = 0.0;//If we are under 0.0, cap it back to zero
+			}
+			
 			if(s_prev <= s_new) {
 				s_new = rand_generator.nextDouble();//Get a new random value to fade to
 			}
 		}
+		
 		
 	}//func
 	

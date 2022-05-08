@@ -95,9 +95,9 @@ public class StatusBannerViewer {
 			sub_button.setText("-");//Reset Buttons
 			status_banner_label.setText("Machine Status");
 			status_banner_display.setEditable(false);//Disable editing of the field
-			if(status_banner_display.getText().length() > 0) {//Only add task if it is not empty
+			if(status_banner_display.getText().length() > 0 && system_messages_list.linkBanner().isSolelyWhitespace(status_banner_display.getText()) == false) {//Only add task if it is not empty or just whitespace
 				system_messages_list.linkBanner().addMessage(status_banner_display.getText());
-				//Call a save function here
+				system_messages_list.linkBanner().saveData();//Save the data in the linked list
 			}
 			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Load back in the linked list
 			status_banner_display.setPromptText("");//Don't set prompt text if there are no items in the linked list

@@ -142,7 +142,21 @@ public class CircularLL<T extends Comparable<? super T>> {
 			return false;//If size is greater than zero, then there are items in the list
 		}*/
 		
-		private String dumpMemory() {//Used for debugging
+		public String dumpMemory() {//Used for debugging
+			String temp = "";
+			Node loc_it;
+			loc_it = sentinel_node;
+			loc_it = sentinel_node.prev_node_address;//Note the way we create the LL, we need to traverse backwards to read out user order correctly
+			while(loc_it != sentinel_node) {
+				temp += (loc_it.node_data + "\n");//Pad the data with a newline
+				loc_it = loc_it.prev_node_address;//Note the way we create the LL, we need to traverse backwards to read out user order correctly
+			}
+			//System.out.println("Temp: \n" + temp);//Debug
+			return temp;
+			
+		}
+		
+		private String debugMemory() {//Used for debugging
 			String temp = "";
 			Node loc_it;
 			loc_it = sentinel_node;
