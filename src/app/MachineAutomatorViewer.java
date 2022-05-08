@@ -21,7 +21,7 @@ public class MachineAutomatorViewer {
 	private TextArea automator_display;//Holds the viewing output area for the machine tasks
 	private HBox button_layout;//Holds the layout for out buttons
 	private Button add_button, sub_button;//Plus and minus buttons for the machine automator
-	private ModelViewInterconnect automation_tasks;//Access the controller that will get the data from our stack class
+	private FabricLoader automation_tasks;//Access the controller that will get the data from our stack class
 	private boolean is_editing;//Holds wether the user is entering data into the text area
 	
 	public MachineAutomatorViewer() {
@@ -31,7 +31,7 @@ public class MachineAutomatorViewer {
 		button_layout = new HBox();//Create the button layout
 		add_button = new Button();//Create the add button
 		sub_button = new Button();//Create the sub button
-		automation_tasks = new ModelViewInterconnect();//Creates the link between model and view
+		automation_tasks = new FabricLoader();//Creates the link between model and view
 		is_editing = false;//Start that the user is not editing data
 		
 		setupViewer();//Init values
@@ -46,7 +46,7 @@ public class MachineAutomatorViewer {
 		automator_viewer_label.setText("Automator Tasks");
 		main_layout.setTop(automator_viewer_label);//Put the label at the top
 		//TextArea
-		automator_display.setText(automation_tasks.importMachineAutomation());//Init the display to the current stack contents
+		automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Init the display to the current stack contents
 		automator_display.setPrefSize(200,200);//Set the size of this area
 		automator_display.setWrapText(true);
 		automator_display.setEditable(false);
@@ -70,7 +70,7 @@ public class MachineAutomatorViewer {
 	
 	private void respondToAddButton() {
 		//maybe add a timer pause here
-		if(automation_tasks.isRoom() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
+		if(automation_tasks.linkAutomator().isRoom() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
 			is_editing = true;//Set that the user is now in edit mode
 			add_button.setText("Save");
 			sub_button.setText("Cancel");
@@ -86,10 +86,10 @@ public class MachineAutomatorViewer {
 			automator_viewer_label.setText("Automator Tasks");
 			automator_display.setEditable(false);//Disable editing of the field
 			if(automator_display.getText().length() > 0) {//Only add task if it is not empty
-				automation_tasks.addTask(automator_display.getText());
+				automation_tasks.linkAutomator().addTask(automator_display.getText());
 				//Call a save function here
 			}
-			automator_display.setText(automation_tasks.importMachineAutomation());//Load back in the stack
+			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Load back in the stack
 			automator_display.setPromptText("");//Don't set prompt text if there are no items in the stack
 		}
 		
@@ -102,10 +102,10 @@ public class MachineAutomatorViewer {
 			add_button.setText("+");
 			sub_button.setText("-");
 			automator_viewer_label.setText("Automator Tasks");
-			automator_display.setText(automation_tasks.importMachineAutomation());//Update the display of the current stack contents
+			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Update the display of the current stack contents
 		}else {
-			automation_tasks.removeTask();//Remove the top task from the list
-			automator_display.setText(automation_tasks.importMachineAutomation());//Update the display of the current stack contents
+			automation_tasks.linkAutomator().removeTask();//Remove the top task from the list
+			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Update the display of the current stack contents
 			//Call a save function here
 		}
 		

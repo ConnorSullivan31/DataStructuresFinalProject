@@ -111,6 +111,13 @@ public class MinHeap {
 		return ("[" + min_node.priority + "] " + min_node.node_data);//return the stored min node -- specifically formatted for this assignment
 	}
 	
+	public boolean isFull() {
+		if(size >= MAX_HEAP) {
+			return true;//Return that the heap is true
+		}
+		return false;//Return that there is room
+	}
+	
 	private class DataNode{
 		/**
 		 *Ctor 

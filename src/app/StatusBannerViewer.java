@@ -25,7 +25,7 @@ public class StatusBannerViewer {
 	private TextArea status_banner_display;//Holds the text view for the machine status
 	private HBox button_layout;//Layout for our buttons
 	private Button add_button, sub_button;//Plus and minus buttons for the banner
-	private ModelViewInterconnect system_messages_list;//Access the controller that will get the data from our circularly linked list class
+	private FabricLoader system_messages_list;//Access the controller that will get the data from our circularly linked list class
 	private Timeline system_message_timer;//Timer that dictates when messages should rotate
 	private double timer_interval = 3000;//Set the timer interval to 3 seconds
 	private boolean is_editing;//Used to hold whether we are in edit mode
@@ -37,9 +37,9 @@ public class StatusBannerViewer {
 		button_layout = new HBox();//Set layout for our buttons
 		add_button = new Button();//Set the button label for the plus button
 		sub_button = new Button();//Set the button label for the minus button
-		system_messages_list = new ModelViewInterconnect();//Create the link between model and view
+		system_messages_list = new FabricLoader();//Create the link between model and view
 		system_message_timer = new Timeline(new KeyFrame(Duration.millis(timer_interval), event -> {
-			status_banner_display.setText(system_messages_list.importSystemBanner());//Display the next message - Called every 3 seconds
+			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Display the next message - Called every 3 seconds
 		}));//This is our version of a timer
 		
 		is_editing = false;//Start out not in edit mode
@@ -56,7 +56,7 @@ public class StatusBannerViewer {
 		status_banner_label.setText("Machine Status");//Set the label text
 		main_layout.setTop(status_banner_label);//Put the label at the top
 		//Text Area
-		status_banner_display.setText(system_messages_list.importSystemBanner());//Set initial value
+		status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Set initial value
 		status_banner_display.setPrefSize(400,50);//Set the size of this area
 		status_banner_display.setWrapText(true);
 		status_banner_display.setEditable(false);
@@ -96,10 +96,10 @@ public class StatusBannerViewer {
 			status_banner_label.setText("Machine Status");
 			status_banner_display.setEditable(false);//Disable editing of the field
 			if(status_banner_display.getText().length() > 0) {//Only add task if it is not empty
-				system_messages_list.addMessage(status_banner_display.getText());
+				system_messages_list.linkBanner().addMessage(status_banner_display.getText());
 				//Call a save function here
 			}
-			status_banner_display.setText(system_messages_list.importSystemBanner());//Load back in the linked list
+			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Load back in the linked list
 			status_banner_display.setPromptText("");//Don't set prompt text if there are no items in the linked list
 		}
 		
@@ -113,10 +113,10 @@ public class StatusBannerViewer {
 			add_button.setText("+");
 			sub_button.setText("-");
 			status_banner_label.setText("Machine Status");
-			status_banner_display.setText(system_messages_list.importSystemBanner());//Update the display of the current stack contents
+			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Update the display of the current stack contents
 		}else {
-			system_messages_list.removeMessage();//Remove the top task from the list
-			status_banner_display.setText(system_messages_list.importSystemBanner());//Update the display of the current stack contents
+			system_messages_list.linkBanner().removeMessage();//Remove the top task from the list
+			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Update the display of the current stack contents
 			//Call a save function here
 		}
 		

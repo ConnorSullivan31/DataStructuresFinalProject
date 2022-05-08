@@ -27,7 +27,7 @@ public class GcodeViewer {
 	private Label completed_label;//Holds the title for the completed gcode display
 	private HBox button_layout;//Holds the layout for our buttons
 	private Button add_button, sub_button;//Plus and minus buttons for the gcode viewer
-	private ModelViewInterconnect gcode_data;//Used to interface with the min heap priority queue for the gcode
+	private FabricLoader gcode_data;//Used to interface with the min heap priority queue for the gcode
 	private boolean is_editing;//Used to hold whether the user is editing data or not
 	
 	public GcodeViewer() {
@@ -43,7 +43,7 @@ public class GcodeViewer {
 		completed_display = new TextArea();//Create the text area
 		completed_label = new Label();//Create the label
 		
-		gcode_data = new ModelViewInterconnect();//Create the controller interconnect
+		gcode_data = new FabricLoader();//Create the controller interconnect
 		is_editing = false;//Start out with the user not editing data
 		
 		setupViewer();//Init values
@@ -64,7 +64,7 @@ public class GcodeViewer {
 		//Label -- Gcode label in edit mode
 		gcode_viewer_label.setText("Enter G-Code");
 		//TextArea -- Gcode data
-		gcode_display.setText(gcode_data.importGcodeList());
+		gcode_display.setText(gcode_data.linkGcode().importGcodeList());
 		gcode_display.setPrefSize(200,50);//Set the size of this area
 		gcode_display.setWrapText(true);
 		gcode_display.setEditable(false);
@@ -86,7 +86,7 @@ public class GcodeViewer {
 		completed_label.setText("Completed G-Code");
 		gcode_view_layout.getChildren().add(completed_label);//Add the label to the display under the buttons
 		//Text Area -- Completed gcode display
-		completed_display.setText(gcode_data.importCompletedCode());
+		completed_display.setText(gcode_data.linkGcode().importCompletedCode());
 		completed_display.setPrefSize(200,150);//Set the size of this area
 		completed_display.setWrapText(true);
 		completed_display.setEditable(false);
@@ -95,7 +95,7 @@ public class GcodeViewer {
 	
 	private void respondToAddButton() {
 		//maybe add a timer pause here
-		if(gcode_data.isRoomG() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
+		if(gcode_data.linkGcode().isRoomG() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
 			is_editing = true;//Set that the user is now in edit mode
 			add_button.setText("Save");
 			sub_button.setText("Cancel");
@@ -120,12 +120,12 @@ public class GcodeViewer {
 			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setEditable(false);//Disable editing of the field
 			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0) {//Only add if priority and gcode are both filled out
-				if(gcode_data.validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
-				gcode_data.addGCode(priority_display.getText(),gcode_display.getText());//Get the text from the priority field, get the text from the gcode field
+				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
+				gcode_data.linkGcode().addGCode(priority_display.getText(),gcode_display.getText());//Get the text from the priority field, get the text from the gcode field
 				//Call a save function here
 				}
 			}
-			gcode_display.setText(gcode_data.importGcodeList());//Load back in the heap
+			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Load back in the heap
 			gcode_display.setPromptText("");//Don't set prompt text if there are no items in the heap
 		}
 		
@@ -140,12 +140,12 @@ public class GcodeViewer {
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
 			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
-			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
+			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Update the display of the current heap contents
 		}else {
 			//System.out.println("Button pushed");//Debug
-			gcode_data.removeGCode();//Remove the top task from the list
-			gcode_display.setText(gcode_data.importGcodeList());//Update the display of the current heap contents
-			completed_display.setText(gcode_data.importCompletedCode());//Update the display of the already pulled heap contents
+			gcode_data.linkGcode().removeGCode();//Remove the top task from the list
+			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Update the display of the current heap contents
+			completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display of the already pulled heap contents
 			//Call a save function here
 		}
 	}	
