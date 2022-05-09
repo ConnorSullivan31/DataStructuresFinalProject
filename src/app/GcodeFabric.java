@@ -14,7 +14,7 @@ public class GcodeFabric {
 	//GCode Viewer
 	private MinHeap gcode_list;//Used to hold the gcode displayed in the gcode viewer
 	private String completed_instructions = "";//Holds the gcode that has been pulled from the min heap
-	private String filename;//Filename for where we'll write the data
+	private String heap_filename, completed_filename;//Filename for where we'll write the data for the heap and the completed instructions
 	
 	GcodeFabric(){
 		loadGcodeData();//Generatre the min heap and give it dummy values for now, later change it to file input
@@ -24,7 +24,8 @@ public class GcodeFabric {
 	//Gcode Viewer
 	private void loadGcodeData() {
 		gcode_list = new MinHeap();//Create the heap for the gcode data
-		filename = "GcodeData.dat";//Set the name for our file
+		heap_filename = "GcodeData.dat";//Set the name for our file that holds data pulled from the heap
+		completed_filename = "ExecutedGcode.dat";//Set the name for our file that holds data pulled from the heap
 		loadData();//Load in the data from the file to the min heap
 	}
 	
@@ -99,7 +100,7 @@ public class GcodeFabric {
 	private void loadData() {
 		String data = "";//Used to hold the data from the file data dump
 		String new_item = "";//Used to hold a single data item
-		FileIO file = new FileIO(filename,AccessMode.INPUT);//Open the file
+		FileIO file = new FileIO(heap_filename,AccessMode.INPUT);//Open the file
 		data = file.loadData();//Load in the filedata
 		//System.out.println("Data SAtring" + data);//Debug file data
 		for(int i = 0; i < data.length(); i++) {
@@ -112,11 +113,15 @@ public class GcodeFabric {
 			new_item  += data.charAt(i);//Save the current character to the new item
 		}
 		
+		
+		
 	}
 	
 	public void saveData() {
-		FileIO file = new FileIO(filename,AccessMode.OUTPUT);//Open the file
+		FileIO file = new FileIO(heap_filename,AccessMode.OUTPUT);//Open the file
 		file.saveData(gcode_list.dumpMemory());//Write the circular linked list data to the file
+		
+		
 	}
 	
 	

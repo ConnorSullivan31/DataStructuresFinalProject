@@ -144,6 +144,7 @@ public class GcodeViewer {
 		}else {
 			//System.out.println("Button pushed");//Debug
 			gcode_data.linkGcode().removeGCode();//Remove the top task from the list
+			gcode_data.linkGcode().saveData();//Save the data without the newly removed item
 			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Update the display of the current heap contents
 			completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display of the already pulled heap contents
 			//Call a save function here

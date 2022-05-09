@@ -31,6 +31,11 @@ public class BannerFabric {
 		system_messages.addItemImmediate("3:COOLANT LEVEL = HGIH");*/
 	}
 	
+	/**
+	 * Used to pass data to the viewer -- viewer may look like it starts at second item, but
+	 * that is because the timer starts before the gui pops up
+	 * @return
+	 */
 	public String importSystemBanner() {
 		String temp;//Used to hold the next status message
 		temp = system_messages.getNext();//Get the next message
