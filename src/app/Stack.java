@@ -8,12 +8,13 @@ package app;
  *Surround operations in this class with a try/catch block
  */
 public class Stack {
-	private final int MAX_STACK = 9;//Hardcode the max size of our stack to be 9 items(item[0] is index padding) -- We could remove this later and init dynamically from the constructor
+	private final int MAX_DISP = 8;// how many items we display at max
+	private final int MAX_STACK = 1024;//Hardcode the max size of our stack to be 1024 items(item[0] is index padding) -- We could remove this later and init dynamically from the constructor
 	private String []stack;//Stack variable
 	private int size;//Size of stack;
 	
 	Stack(){
-		stack = new String[MAX_STACK];//Create an array of 9 elements - save the first element as an acess buffer to prevent index out of bounds
+		stack = new String[MAX_STACK + 1];//Create an array of 9 elements - save the first element as an acess buffer to prevent index out of bounds
 		size = 0;//Set the size of our stack to 0 since it is empty to start
 	}
 	
@@ -64,7 +65,7 @@ public class Stack {
 	public String dumpMemory() {
 		String stack_dump = "";//Will hold the stack dump data to be returned -- init to empty in case our stack is empty at this time
 
-			for(int i = size; i > 0; i--) {
+			for(int i = size, cnt = 0; i > 0 && cnt < (MAX_DISP); i--, cnt++) {
 				stack_dump += stack[i];//No need to Separate with newlines -- entries should all be newline padded
 			}
 		
