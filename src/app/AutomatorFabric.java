@@ -41,6 +41,14 @@ public class AutomatorFabric {
 			return temp;
 		}
 		
+		
+		public boolean isSolelyWhitespace(String data) {
+			if(data.matches("[\\s]+")) {
+				return true;//Return that the string is only whitespace
+			}
+			return false;//Return that the data is not just whitespace
+		}
+		
 		/**
 		 * Pops the item on the stack will be linked to the sub button in viewer
 		 */

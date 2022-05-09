@@ -85,7 +85,7 @@ public class MachineAutomatorViewer {
 			sub_button.setText("-");//Reset Buttons
 			automator_viewer_label.setText("Automator Tasks");
 			automator_display.setEditable(false);//Disable editing of the field
-			if(automator_display.getText().length() > 0) {//Only add task if it is not empty
+			if(automator_display.getText().length() > 0 && automation_tasks.linkBanner().isSolelyWhitespace(automator_display.getText()) == false) {//Only add task if it is not empty or just whitespace
 				automation_tasks.linkAutomator().addTask(automator_display.getText());
 				//Call a save function here
 			}

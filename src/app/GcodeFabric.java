@@ -41,6 +41,13 @@ public class GcodeFabric {
 		return temp;//Return the dumped data with an arrow indicator for the top priority item
 	}
 	
+	public boolean isSolelyWhitespace(String data) {
+		if(data.matches("[\\s]+")) {
+			return true;//Return that the string is only whitespace
+		}
+		return false;//Return that the data is not just whitespace
+	}
+	
 	public boolean validatePriority(String data) {//Check if the user entered an integer
 		String temp;//Will hold our new string that doesnt contain any newlines or spaces
 		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
