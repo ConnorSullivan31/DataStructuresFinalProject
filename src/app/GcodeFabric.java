@@ -29,7 +29,11 @@ public class GcodeFabric {
 		loadData();//Load in the data from the file to the min heap
 	}
 	
-	public String importGcodeList() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
+	/**
+	 * Display the peeked item from the heap
+	 * @return The root node of the heap
+	 */
+	public String importGcode() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
 		String temp;//Used to hold the data dumped by the heap
 		temp = gcode_list.peekMin();//Save the dumped data
 		if(temp == "") {//pullMin() and peekMin() return an empty string if the heap is empty -- made it this way as its easier to interface with TextAreas -- no need for exceptions here either
@@ -79,7 +83,7 @@ public class GcodeFabric {
 		//Returns an empty string if the size of the heap is zero -- No exceptions are needed because of the return
 			temp = gcode_list.pullMin();//Pull the top value off the heap -- gets stored it to temp
 			if(temp != "") {
-				completed_instructions +=temp + "\n";//Add the pulled gcode to completed instructions for later display
+				completed_instructions += ">" + temp;//Add the pulled gcode to completed instructions for later display
 			}
 	}
 	
@@ -88,6 +92,10 @@ public class GcodeFabric {
 			return "[EMPTY]";//Indicate empty
 		}
 		return completed_instructions;//Return the gcode pulled from min heap
+	}
+	
+	public void clearCompletedCode() {
+		completed_instructions = "";//Clear the string that holds previous instructions
 	}
 	
 	public boolean isRoomG() {
@@ -99,27 +107,50 @@ public class GcodeFabric {
 	
 	private void loadData() {
 		String data = "";//Used to hold the data from the file data dump
-		String new_item = "";//Used to hold a single data item
-		FileIO file = new FileIO(heap_filename,AccessMode.INPUT);//Open the file
-		data = file.loadData();//Load in the filedata
+		String new_item = "", new_pri = "";//Used to hold a single data item and its priority
+		boolean in_priority = false;//Used to tell if we have braces and extract the number
+		FileIO heapfile = new FileIO(heap_filename,AccessMode.INPUT);//Open the file
+		data = heapfile.loadData();//Load in the filedata
 		//System.out.println("Data SAtring" + data);//Debug file data
 		for(int i = 0; i < data.length(); i++) {
-			if(data.charAt(i) == '\n' && i !=0 && i != (data.length()-1)) {//Only add the entry if we have a newline in the middle of the string
+			
+			if(in_priority) {
+				if(data.charAt(i) == ']') {
+					in_priority = false;//closing bracket -- should have extracted priority at this point
+				}else {
+				new_pri += data.charAt(i);//Add number in brackets to priority
+				}
+				continue;//Do not add this data to the new item string
+			}//if
+			
+			if(data.charAt(i) == '[') {//opening bracket = set to get pri mode
+				in_priority = true;//Set that we are now getting priority
+				continue;//Do not add this to the data string
+			}//if
+			
+			new_item  += data.charAt(i);//Save the current character to the new item
+			if(data.charAt(i) == '\n' && i !=0) {//Dont add a initial newline -- shouldnt happen with how we export our data
 				//System.out.println("New Item: " + new_item);//Debug
-				gcode_list.addItem(i, new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
+				gcode_list.addItem(Integer.parseInt(new_pri), new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
+				new_pri = "";//Reset the priority
 				new_item = "";//Reset new item to empty
 				continue;//Get next charachter
-			}
-			new_item  += data.charAt(i);//Save the current character to the new item
-		}
+			}//if
+		}//for
 		
-		
+		//Load in the precompleted gcode back into the completed instuctions string
+		FileIO completedfile = new FileIO(completed_filename,AccessMode.INPUT);//Open the file
+		completed_instructions = completedfile.loadData();//Save the data from the file into completed_instructions string
 		
 	}
 	
 	public void saveData() {
-		FileIO file = new FileIO(heap_filename,AccessMode.OUTPUT);//Open the file
-		file.saveData(gcode_list.dumpMemory());//Write the circular linked list data to the file
+		FileIO heapfile = new FileIO(heap_filename,AccessMode.OUTPUT);//Open the file
+		heapfile.saveData(gcode_list.dumpMemory());//Write the circular linked list data to the file
+		
+		//Save the completed instructions pulled off of the heap
+		FileIO completedfile = new FileIO(completed_filename,AccessMode.OUTPUT);//Open the file
+		completedfile.saveData(completed_instructions);//Write the circular linked list data to the file
 		
 		
 	}

@@ -25,6 +25,8 @@ public class GcodeViewer {
 	private TextArea priority_display;//Appears when the user adds a new entry so they can enter priority
 	private TextArea completed_display;//Holds all of the gcode that has been pulled off of the min heap
 	private Label completed_label;//Holds the title for the completed gcode display
+	private Button clr_button;//Clear button for removing pulled heap data from the complted gcode viewer
+	private VBox completed_layout;//Holds the layout for the completed gcode 
 	private HBox button_layout;//Holds the layout for our buttons
 	private Button add_button, sub_button;//Plus and minus buttons for the gcode viewer
 	private FabricLoader gcode_data;//Used to interface with the min heap priority queue for the gcode
@@ -42,6 +44,8 @@ public class GcodeViewer {
 		sub_button = new Button();//Create the sub button
 		completed_display = new TextArea();//Create the text area
 		completed_label = new Label();//Create the label
+		clr_button = new Button();//Create the button
+		completed_layout = new VBox();//Create the completed gcode section layout
 		
 		gcode_data = new FabricLoader();//Create the controller interconnect
 		is_editing = false;//Start out with the user not editing data
@@ -64,7 +68,7 @@ public class GcodeViewer {
 		//Label -- Gcode label in edit mode
 		gcode_viewer_label.setText("Enter G-Code");
 		//TextArea -- Gcode data
-		gcode_display.setText(gcode_data.linkGcode().importGcodeList());
+		gcode_display.setText(gcode_data.linkGcode().importGcode());
 		gcode_display.setPrefSize(200,50);//Set the size of this area
 		gcode_display.setWrapText(true);
 		gcode_display.setEditable(false);
@@ -90,7 +94,13 @@ public class GcodeViewer {
 		completed_display.setPrefSize(200,150);//Set the size of this area
 		completed_display.setWrapText(true);
 		completed_display.setEditable(false);
-		main_layout.setBottom(completed_display);//Set the buttons to be displayed on the bottom of the border pane
+		//Clear Completed code button
+		clr_button.setText("Clear");
+		clr_button.setOnAction(event -> respondToClearButton());//Set action to clear completed gcode viewer
+		clr_button.setPrefSize(64, 16);
+		//Completed gcode layout
+		completed_layout.getChildren().addAll(completed_display,clr_button);//Add the items to the vbox in this order
+		main_layout.setBottom(completed_layout);//Set the layout to be displayed on the bottom of the border pane
 	}
 	
 	private void respondToAddButton() {
@@ -125,7 +135,7 @@ public class GcodeViewer {
 				gcode_data.linkGcode().saveData();//Save the data to the file
 				}
 			}
-			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Load back in the heap
+			gcode_display.setText(gcode_data.linkGcode().importGcode());//Load back in the heap
 			gcode_display.setPromptText("");//Don't set prompt text if there are no items in the heap
 		}
 		
@@ -140,16 +150,22 @@ public class GcodeViewer {
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
 			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
-			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Update the display of the current heap contents
+			gcode_display.setText(gcode_data.linkGcode().importGcode());//Update the display of the current heap contents
 		}else {
 			//System.out.println("Button pushed");//Debug
 			gcode_data.linkGcode().removeGCode();//Remove the top task from the list
 			gcode_data.linkGcode().saveData();//Save the data without the newly removed item
-			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Update the display of the current heap contents
+			gcode_display.setText(gcode_data.linkGcode().importGcode());//Update the display of the current heap contents
 			completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display of the already pulled heap contents
 			//Call a save function here
 		}
-	}	
+	}
+	
+	private void respondToClearButton() {
+		gcode_data.linkGcode().clearCompletedCode();//Clear the completed code string
+		completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display
+		gcode_data.linkGcode().saveData();//Save our new data -- do this after since it is io and slower -- may not matter due to threads
+	}
 }
 
 //Note:

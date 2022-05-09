@@ -96,7 +96,7 @@ public class AutomatorFabric {
 			for(int i = 0; i < data.length(); i++) {
 				new_item  += data.charAt(i);//Save the current character to the new item
 				if(data.charAt(i) == '\n' && i !=0) {//Don't add a new entry if we start with a newline -- shouldn't happen anyway
-					System.out.println("New Item: " + new_item);//Debug
+					//System.out.println("New Item: " + new_item);//Debug
 					machine_tasks.push(new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
 					new_item = "";//Reset new item to empty
 					continue;//Get next charachter

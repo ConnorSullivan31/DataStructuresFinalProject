@@ -53,7 +53,7 @@ public class MinHeap {
 	
 	private void minHeapify(int index) {//Move a larger item at the root node downwards until it meets minheap requirements
 		//If we are going to heapify, we can only do so if we are not already at a node index
-		if(atLeaf(index) == false) {//This is the base case for our recursion
+		if(atLeaf(index) == false) {//This is the base case for our recursion -- should also prevent null ptrs due to bad index -- SHOULD
 			//If we are going to heapify, we only need to do so if the current index priority value is greater than either of its children, otherwise we are valid minheap and no need to move
 			if(heap[index].priority > heap[getLeftChildIndex(index)].priority || heap[index].priority > heap[getRightChildIndex(index)].priority) {
 				//If the left child is less than the right, then we choose to swap the left -- always pick the smaller of the two to move up and traverse that subtree
@@ -120,10 +120,10 @@ public class MinHeap {
 	
 	public String dumpMemory() {
 		String temp = "";//Used to hold the heaps contents
-		for(int i = 1; i < size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
+		for(int i = 1; i <= size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
 			temp += "[" + heap[i].priority + "] " + heap[i].node_data;//Should already have a newline for separation here
 		}
-		//System.out.println(temp);//Debug
+		System.out.println(temp);//Debug
 		return temp;//Return the created data
 	}
 	
