@@ -30,7 +30,7 @@ public class FileIO {
 				
 				try {
 					fd.createNewFile();//Creates a new blank file if one does not already exist
-					fd.setWritable(true);//Set our file to writeable so we can write data to it
+					///fd.setWritable(true);//Set our file to writeable so we can write data to it
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					System.out.println("Error: Could not generate new file.");//Print out that we could not create a new and empty file
@@ -84,7 +84,7 @@ public class FileIO {
 	public void saveData(String data) {
 		try {
 			output_stream.write(data);//Write the data to the file
-			fd.setWritable(false);//Set our file to read only so that nobody can mess with it
+			//fd.setWritable(false);//Set our file to read only so that nobody can mess with it
 			output_stream.close();//Close the file
 		} catch (IOException e) {
 			System.out.println("Error: Could not write data to file");
