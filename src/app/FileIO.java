@@ -29,6 +29,10 @@ public class FileIO {
 			if(access_mode == AccessMode.INPUT) {
 				
 				try {
+					/*if(fd.canWrite() == false) {
+						fd.delete();//Delete the read only file -- We should only ever call this in our program after a read
+						//So we should not loose any existing data here
+					}*/
 					fd.createNewFile();//Creates a new blank file if one does not already exist
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -82,9 +86,8 @@ public class FileIO {
 	 */
 	public void saveData(String data) {
 		try {
-			//fd.setWritable(true);//Set our file to writeable so we can write data to it
 			output_stream.write(data);//Write the data to the file
-			//fd.setWritable(false);//Set our file to read only so that nobody can mess with it
+			//fd.setWritable(false);//Set our file to read only so that nobody can mess with it -- we will delete if after first read on next write
 			output_stream.close();//Close the file
 		} catch (IOException e) {
 			System.out.println("Error: Could not write data to file");
