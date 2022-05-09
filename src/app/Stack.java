@@ -42,14 +42,30 @@ public class Stack {
 	}
 	
 	/**
-	 * Returns a string containing the whole stack
+	 * Returns a string containing the whole stack -- exports in upward order, so items can be pushed in
+	 * top to bottom and mirrors the stack -- the dumpMemory function is the reverse of this -- it
+	 * is used to read from top to bottom -- here we write bottom to top in order to create the stack
 	 * @return
 	 */
-	public String dump() {
+	public String exportMemory() {
+		String stack_dump = "";//Will hold the stack dump data to be returned -- init to empty in case our stack is empty at this time
+
+			for(int i = 1; i <= size; i++) {
+				stack_dump += stack[i];//No need to Separate with newlines -- entries should all be newline padded
+			}
+		
+		return stack_dump;//Return the generated string of the stack dump
+	}
+	
+	/**
+	 * Returns a string containing the whole stack -- top to bottom order to be displayed correctly
+	 * @return
+	 */
+	public String dumpMemory() {
 		String stack_dump = "";//Will hold the stack dump data to be returned -- init to empty in case our stack is empty at this time
 
 			for(int i = size; i > 0; i--) {
-				stack_dump += stack[i] + "\n";//Separate with newlines
+				stack_dump += stack[i];//No need to Separate with newlines -- entries should all be newline padded
 			}
 		
 		return stack_dump;//Return the generated string of the stack dump

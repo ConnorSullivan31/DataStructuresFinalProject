@@ -3,6 +3,8 @@
  */
 package app;
 
+import app.FileIO.AccessMode;
+
 /**
  * @author ConnorSullivan31
  *
@@ -12,6 +14,7 @@ public class GcodeFabric {
 	//GCode Viewer
 	private MinHeap gcode_list;//Used to hold the gcode displayed in the gcode viewer
 	private String completed_instructions = "";//Holds the gcode that has been pulled from the min heap
+	private String filename;//Filename for where we'll write the data
 	
 	GcodeFabric(){
 		loadGcodeData();//Generatre the min heap and give it dummy values for now, later change it to file input
@@ -21,14 +24,8 @@ public class GcodeFabric {
 	//Gcode Viewer
 	private void loadGcodeData() {
 		gcode_list = new MinHeap();//Create the heap for the gcode data
-		gcode_list.addItem(6,"6th Priority");
-		gcode_list.addItem(20,"20th Priority");
-		gcode_list.addItem(5,"5th Priority");//Dummy values
-		gcode_list.addItem(4,"4th Priority");
-		gcode_list.addItem(1,"Top Priority");
-		gcode_list.addItem(2,"Med Priority");
-		gcode_list.addItem(3,"Low Priority");
-		gcode_list.addItem(8,"8th Priority");
+		filename = "GcodeData.dat";//Set the name for our file
+		loadData();//Load in the data from the file to the min heap
 	}
 	
 	public String importGcodeList() {//If we are told ThiS iS NoT HOw iTS SupPoSed tO bE, then just change dump() to get min
@@ -70,7 +67,7 @@ public class GcodeFabric {
 		temp = data.replaceAll("\\n", " ");//Replace any newlines from the text box with a space
 		
 		try {
-		gcode_list.addItem(formulatePriority(pri), temp);//add the 
+		gcode_list.addItem(formulatePriority(pri), temp + "\n");//add the item to the heap -- re-add the newline that we removed above
 		}catch(IndexOutOfBoundsException e) {
 			System.out.println("Error: " + e);//Probably don't need this printout -- probably remove later
 		}
@@ -99,7 +96,28 @@ public class GcodeFabric {
 		return true;//Return true if there is room for a new task
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	private void loadData() {
+		String data = "";//Used to hold the data from the file data dump
+		String new_item = "";//Used to hold a single data item
+		FileIO file = new FileIO(filename,AccessMode.INPUT);//Open the file
+		data = file.loadData();//Load in the filedata
+		//System.out.println("Data SAtring" + data);//Debug file data
+		for(int i = 0; i < data.length(); i++) {
+			if(data.charAt(i) == '\n' && i !=0 && i != (data.length()-1)) {//Only add the entry if we have a newline in the middle of the string
+				//System.out.println("New Item: " + new_item);//Debug
+				gcode_list.addItem(i, new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
+				new_item = "";//Reset new item to empty
+				continue;//Get next charachter
+			}
+			new_item  += data.charAt(i);//Save the current character to the new item
+		}
+		
+	}
+	
+	public void saveData() {
+		FileIO file = new FileIO(filename,AccessMode.OUTPUT);//Open the file
+		file.saveData(gcode_list.dumpMemory());//Write the circular linked list data to the file
+	}
 	
 	
 }

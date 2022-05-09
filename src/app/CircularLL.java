@@ -148,7 +148,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 			loc_it = sentinel_node;
 			loc_it = sentinel_node.prev_node_address;//Note the way we create the LL, we need to traverse backwards to read out user order correctly
 			while(loc_it != sentinel_node) {
-				temp += (loc_it.node_data + "\n");//Pad the data with a newline
+				temp += (loc_it.node_data);//Pad the data with a newline
 				loc_it = loc_it.prev_node_address;//Note the way we create the LL, we need to traverse backwards to read out user order correctly
 			}
 			//System.out.println("Temp: \n" + temp);//Debug

@@ -3,6 +3,8 @@
  */
 package app;
 
+import app.FileIO.AccessMode;
+
 /**
  * @author ConnorSullivan31
  *
@@ -10,20 +12,16 @@ package app;
 public class AutomatorFabric {
 
 		private Stack machine_tasks;//Used to hold the current automation tasks for the machine automator
-	
+		private String filename;//Used to hold the filename where we'll store and read data
+		
 	AutomatorFabric(){
 		loadMachineAutomator();//Create the stack and load dummy data
 	}
 	
 		private void loadMachineAutomator() {
 			machine_tasks = new Stack();//Create the task stack
-			try {//We don't need this here but it is kept as an example when doing any other ops on the stack class anywhere else
-			machine_tasks.push(">SHUTDOWN");
-			machine_tasks.push(">Calibrate Offset");//Replace these with file input
-			machine_tasks.push(">Pause(300pcs)");
-			}catch(IllegalArgumentException e) {
-				System.out.println("Error: " + e);//Probably remove this later but keep for now
-			}
+			filename = "AutomatorTasks.dat";//Create the filename to read and write to 
+			loadData();//Load in the data from the file
 		}
 		
 		/**
@@ -32,9 +30,9 @@ public class AutomatorFabric {
 		 */
 		public String importMachineAutomation() {
 			String temp;//Used to hold the imported data
-			temp = machine_tasks.dump();//Returns the whole stack separated by newlines
+			temp = machine_tasks.dumpMemory();//Returns the whole stack -- Top to bottom order
 			
-			if(machine_tasks.dump() == "") {
+			if(machine_tasks.dumpMemory() == "") {
 				return ">[EMPTY]";//If there is nothing in the stack return empty as the data
 			}
 			
@@ -70,7 +68,7 @@ public class AutomatorFabric {
 			temp = new_task.replaceAll("\\n", " ");//Replace any newlines from the text box with a space
 			
 			try {
-			machine_tasks.push(">" + temp);//Add a new task
+			machine_tasks.push(">" + temp + "\n");//Add a new task -- re-add the newline that we removed earlier
 			}catch(IndexOutOfBoundsException e) {
 				return false;//Return false to the button that we cannot add more data
 			}
@@ -87,5 +85,30 @@ public class AutomatorFabric {
 			}
 			return true;//Return true if there is room for a new task
 		}
+		
+		
+		private void loadData() {
+			String data = "";//Used to hold the data from the file data dump
+			String new_item = "";//Used to hold a single data item
+			FileIO file = new FileIO(filename,AccessMode.INPUT);//Open the file
+			data = file.loadData();//Load in the filedata
+			//System.out.println("Data SAtring" + data);//Debug file data
+			for(int i = 0; i < data.length(); i++) {
+				new_item  += data.charAt(i);//Save the current character to the new item
+				if(data.charAt(i) == '\n' && i !=0) {//Don't add a new entry if we start with a newline -- shouldn't happen anyway
+					System.out.println("New Item: " + new_item);//Debug
+					machine_tasks.push(new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
+					new_item = "";//Reset new item to empty
+					continue;//Get next charachter
+				}
+			}
+			
+		}
+		
+		public void saveData() {
+			FileIO file = new FileIO(filename,AccessMode.OUTPUT);//Open the file
+			file.saveData(machine_tasks.exportMemory());//Write the stack data to the file -- bottom to top
+		}
+		
 	
 }

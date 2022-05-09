@@ -122,7 +122,7 @@ public class GcodeViewer {
 			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false) {//Only add if priority and gcode are both filled outf and gcode is not just whitespace
 				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
 				gcode_data.linkGcode().addGCode(priority_display.getText(),gcode_display.getText());//Get the text from the priority field, get the text from the gcode field
-				//Call a save function here
+				gcode_data.linkGcode().saveData();//Save the data to the file
 				}
 			}
 			gcode_display.setText(gcode_data.linkGcode().importGcodeList());//Load back in the heap

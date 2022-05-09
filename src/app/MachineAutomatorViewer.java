@@ -87,7 +87,7 @@ public class MachineAutomatorViewer {
 			automator_display.setEditable(false);//Disable editing of the field
 			if(automator_display.getText().length() > 0 && automation_tasks.linkBanner().isSolelyWhitespace(automator_display.getText()) == false) {//Only add task if it is not empty or just whitespace
 				automation_tasks.linkAutomator().addTask(automator_display.getText());
-				//Call a save function here
+				automation_tasks.linkAutomator().saveData();//Save the data to the file
 			}
 			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Load back in the stack
 			automator_display.setPromptText("");//Don't set prompt text if there are no items in the stack
@@ -105,6 +105,7 @@ public class MachineAutomatorViewer {
 			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Update the display of the current stack contents
 		}else {
 			automation_tasks.linkAutomator().removeTask();//Remove the top task from the list
+			automation_tasks.linkAutomator().saveData();//Save the data without the removed item
 			automator_display.setText(automation_tasks.linkAutomator().importMachineAutomation());//Update the display of the current stack contents
 			//Call a save function here
 		}

@@ -118,6 +118,16 @@ public class MinHeap {
 		return false;//Return that there is room
 	}
 	
+	public String dumpMemory() {
+		String temp = "";//Used to hold the heaps contents
+		for(int i = 1; i < size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
+			temp += "[" + heap[i].priority + "] " + heap[i].node_data + "\n";//Add newline to the end for later parsing
+		}
+		//System.out.println(temp);//Debug
+		return temp;//Return the created data
+	}
+	
+	
 	private class DataNode{
 		/**
 		 *Ctor 

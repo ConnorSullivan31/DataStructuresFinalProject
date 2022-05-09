@@ -51,9 +51,9 @@ public class BannerFabric {
 	
 	public void addMessage(String msg) {
 		String temp;//Holds our new string that doesn't contain newlines
-		temp = msg;/*.replaceAll("\\n", " ");*///Replace any newlines from the text box with a space
+		temp = msg.replaceAll("\\n", " ");///Replace any newlines from the text box with a space
 		
-		system_messages.addItemImmediate(temp);//Add a message to the linked list
+		system_messages.addItemImmediate(temp + "\n");//Add a message to the linked list -- re-add that newline that we removed earlier
 	}
 	
 	public void removeMessage() {
@@ -69,15 +69,15 @@ public class BannerFabric {
 		String new_item = "";//Used to hold a single data item
 		FileIO file = new FileIO(filename,AccessMode.INPUT);//Open the file
 		data = file.loadData();//Load in the filedata
-		System.out.println("Data SAtring" + data);//Debug file data
+		//System.out.println("Data SAtring" + data);//Debug file data
 		for(int i = 0; i < data.length(); i++) {
-			if(data.charAt(i) == '\n' && i !=0 && i != (data.length()-1)) {//Only add the entry if we have a newline in the middle of the string
-				System.out.println("New Item: " + new_item);
+			new_item  += data.charAt(i);//Save the current character to the new item
+			if(data.charAt(i) == '\n' && i !=0) {//Don't add entry if the first item is a newline -- should never happen
+				//System.out.println("New Item: " + new_item);//Debug
 				system_messages.addItemImmediate(new_item);//If we reach a newline, we know that we are at a new item due to how we parse and save memory
 				new_item = "";//Reset new item to empty
 				continue;//Get next charachter
 			}
-			new_item  += data.charAt(i);//Save the current character to the new item
 		}
 		
 	}

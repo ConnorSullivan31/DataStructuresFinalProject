@@ -110,8 +110,5 @@ public class AppAssembler extends Application {
 		}
 	}
 	
-	public void test() {
-		System.out.println("New Banner Message");
-	}
 
 }

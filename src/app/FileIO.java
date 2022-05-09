@@ -27,6 +27,15 @@ public class FileIO {
 		access_mode = mode;//Save whether we are reading or writing
 		
 			if(access_mode == AccessMode.INPUT) {
+				
+				try {
+					fd.createNewFile();//Creates a new blank file if one does not already exist
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Error: Could not generate new file.");//Print out that we could not create a new and empty file
+					e1.printStackTrace();
+				}
+				
 				try {
 					input_stream = new BufferedReader(new FileReader(fd));//Open the file for reading
 				} catch (FileNotFoundException e) {
@@ -83,7 +92,7 @@ public class FileIO {
 	
 	
 	
-	enum AccessMode{
+	public enum AccessMode{
 		INPUT,OUTPUT;//File access modes
 	}
 	
