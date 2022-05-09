@@ -116,6 +116,7 @@ public class StatusBannerViewer {
 			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Update the display of the current stack contents
 		}else {
 			system_messages_list.linkBanner().removeMessage();//Remove the top task from the list
+			system_messages_list.linkBanner().saveData();//Save data without the just removed item
 			status_banner_display.setText(system_messages_list.linkBanner().importSystemBanner());//Update the display of the current stack contents
 			//Call a save function here
 		}
