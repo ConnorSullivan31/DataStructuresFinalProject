@@ -88,7 +88,7 @@ public class GcodeViewer {
 		gcode_view_layout.getChildren().add(button_layout);//Set the buttons to be displayed on the bottom of the vbox
 		//Label
 		completed_label.setText("Completed G-Code");
-		gcode_view_layout.getChildren().add(completed_label);//Add the label to the display under the buttons
+		//completed_layout.getChildren().add(completed_label);//Add the label to the display under the buttons -- moved to completed layout init
 		//Text Area -- Completed gcode display
 		completed_display.setText(gcode_data.linkGcode().importCompletedCode());
 		completed_display.setPrefSize(200,150);//Set the size of this area
@@ -99,7 +99,7 @@ public class GcodeViewer {
 		clr_button.setOnAction(event -> respondToClearButton());//Set action to clear completed gcode viewer
 		clr_button.setPrefSize(64, 16);
 		//Completed gcode layout
-		completed_layout.getChildren().addAll(completed_display,clr_button);//Add the items to the vbox in this order
+		completed_layout.getChildren().addAll(completed_label, completed_display,clr_button);//Add the items to the vbox in this order
 		main_layout.setBottom(completed_layout);//Set the layout to be displayed on the bottom of the border pane
 	}
 	
@@ -111,7 +111,7 @@ public class GcodeViewer {
 			sub_button.setText("Cancel");
 			viewer_label.setText("Set G-Code Priority");//Change the top label to label the priority text field
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().addAll(priority_display,gcode_viewer_label,gcode_display,button_layout,completed_label);//Add the priority text field, the gcode label, the gcode display, the button layout, and the completed label to the vbox layout in that order
+			gcode_view_layout.getChildren().addAll(priority_display,gcode_viewer_label,gcode_display,button_layout);//Add the priority text field, the gcode label, the gcode display, the button layout, and the completed label to the vbox layout in that order
 			
 			priority_display.requestFocus();//Request that we set the focus to this window
 			priority_display.clear();//Set the text field to empty so the user can enter data -- we could also just use setText("");
@@ -127,7 +127,7 @@ public class GcodeViewer {
 			sub_button.setText("-");//Reset Buttons
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
+			gcode_view_layout.getChildren().addAll(gcode_display,button_layout);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setEditable(false);//Disable editing of the field
 			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false) {//Only add if priority and gcode are both filled outf and gcode is not just whitespace
 				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
@@ -149,7 +149,7 @@ public class GcodeViewer {
 			sub_button.setText("-");
 			viewer_label.setText("G-Code Viewer");//Restore the main label
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
-			gcode_view_layout.getChildren().addAll(gcode_display,button_layout, completed_label);//Add the gcode display, button layout, and completed label back to the vbox layout
+			gcode_view_layout.getChildren().addAll(gcode_display,button_layout);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setText(gcode_data.linkGcode().importGcode());//Update the display of the current heap contents
 		}else {
 			//System.out.println("Button pushed");//Debug

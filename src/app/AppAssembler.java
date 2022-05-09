@@ -73,13 +73,13 @@ public class AppAssembler extends Application {
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//Gcode viewer
 			
-			GridPane.setConstraints(gcode_viewer.getViewer(), 0, 1);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
-			
+			GridPane.setConstraints(gcode_viewer.getViewer(), 1, 1);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
+			GridPane.setRowSpan(gcode_viewer.getViewer(), 2);//Span the gcode down to cover the gcode and the load meter row
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 			//This BorderPane will be for our machine automator viewer (requirement #2)
 			
-			GridPane.setConstraints(automator_viewer.getViewer(), 1, 1);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
-			GridPane.setRowSpan(automator_viewer.getViewer(), 2);//Span the Automator down to cover the gcode and the load meter row
+			GridPane.setConstraints(automator_viewer.getViewer(), 0, 1);//Tell the master layout where out sublayout should sit in the window is arranged in an array format
+			
 			
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//Status banner viewer

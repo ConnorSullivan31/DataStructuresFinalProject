@@ -101,7 +101,7 @@ public class MinHeap {
 	
 	public String pullMin(){
 		if(size == 0) {
-			System.out.println("pull0");
+			//System.out.println("pull0");//Debug
 			return "";//Return an empty string if the heap if empty
 		}
 		//System.out.println(size);//Debug
@@ -110,7 +110,10 @@ public class MinHeap {
 		minHeapify(ROOT_INDEX);//Heapify our heap -- move the new item at the root index down to form a valid heap if needed
 		return ("[" + min_node.priority + "] " + min_node.node_data);//return the stored min node -- specifically formatted for this assignment
 	}
-	
+	/**
+	 * Tests whether the heap is full or not
+	 * @return is full
+	 */
 	public boolean isFull() {
 		if(size >= MAX_HEAP) {
 			return true;//Return that the heap is true
