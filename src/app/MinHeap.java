@@ -123,7 +123,7 @@ public class MinHeap {
 		for(int i = 1; i <= size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
 			temp += "[" + heap[i].priority + "] " + heap[i].node_data;//Should already have a newline for separation here
 		}
-		System.out.println(temp);//Debug
+		//System.out.println(temp);//Debug
 		return temp;//Return the created data
 	}
 	
