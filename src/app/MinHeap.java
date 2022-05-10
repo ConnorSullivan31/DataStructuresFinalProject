@@ -55,8 +55,8 @@ public class MinHeap {
 	private void minHeapify(int index) {//Move a larger item at the root node downwards until it meets minheap requirements
 		//If we are going to heapify, we can only do so if we are not already at a node index
 		//System.out.println("Heapify" + size);//Debug
-		//If we are not at leaf, then proceed with the heapify
-		if(!atLeaf(index)) {//This is the base case for our recursion -- should also prevent null ptrs due to bad index -- SHOULD
+		//If we are not at leaf, then proceed with the heapify -- also we wont proceed if we only have the root node
+		if(!atLeaf(index) && size > 1) {//This is the base case for our recursion -- should also prevent null ptrs due to bad index -- SHOULD
 			//If we are going to heapify, we only need to do so if the current index priority value is greater than either of its children, otherwise we are valid minheap and no need to move
 			if(heap[index].priority > heap[getLeftChildIndex(index)].priority || heap[index].priority > heap[getRightChildIndex(index)].priority) {
 				//If the left child is less than the right, then we choose to swap the left -- always pick the smaller of the two to move up and traverse that subtree
