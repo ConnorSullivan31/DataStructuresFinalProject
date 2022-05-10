@@ -19,7 +19,7 @@ public class MinHeap {
 	public MinHeap() {
 		heap = new DataNode[MAX_HEAP+1];//Create the new memory for our heap -- add one for the zero index that we dont count or access since it is always the max-min
 		size = 0;//Start out with an empty heap we don't use the first element in the array -- it is used as zero padding to prevent index out of bounds exceptions -- code would get way more complicated
-		heap[0] = new DataNode(Integer.MIN_VALUE, null);//Set the heap top to the minimum integer value possible with null data
+		heap[0] = new DataNode(Integer.MIN_VALUE, "");//Set the heap top to the minimum integer value possible with mt data -- only really used a base case for when we have one node
 	}
 	
 	private int getParentIndex(int index) {
@@ -37,6 +37,7 @@ public class MinHeap {
 	private boolean atLeaf(int index) {
 		//if our current index position is greater than the index position of its parent and the index position is less than or equal to size, then were are a leaf node
 		//[-9999,3,4,7,8,9,10,12];size = 7; -- is 4 leaf? -- no, index = 2 !> 7/2 -> 2 !> 3 -- is 9 leaf? -- yes, index = 5 > 7/2 -> 5 > 3//Example
+		
 		if(index > (size / 2) && index <= size) {//First condition will only evaluate true if we are at a leaf node, second condition only ensures we don't go out of bounds for the heap
 			return true;//We are at a leaf node
 		}
@@ -53,23 +54,24 @@ public class MinHeap {
 	
 	private void minHeapify(int index) {//Move a larger item at the root node downwards until it meets minheap requirements
 		//If we are going to heapify, we can only do so if we are not already at a node index
-		if(atLeaf(index) == false) {//This is the base case for our recursion -- should also prevent null ptrs due to bad index -- SHOULD
+		//System.out.println("Heapify" + size);//Debug
+		//If we are not at leaf, then proceed with the heapify
+		if(!atLeaf(index)) {//This is the base case for our recursion -- should also prevent null ptrs due to bad index -- SHOULD
 			//If we are going to heapify, we only need to do so if the current index priority value is greater than either of its children, otherwise we are valid minheap and no need to move
 			if(heap[index].priority > heap[getLeftChildIndex(index)].priority || heap[index].priority > heap[getRightChildIndex(index)].priority) {
 				//If the left child is less than the right, then we choose to swap the left -- always pick the smaller of the two to move up and traverse that subtree
 				if(heap[getLeftChildIndex(index)].priority < heap[getRightChildIndex(index)].priority) {
 					swapNodes(index, getLeftChildIndex(index));//Swap the current node with its left child
 					minHeapify(getLeftChildIndex(index));//Recurse down the left subtree and make the comparison again
-				}else {
-					//If the right child is less than the left, then we choose to swap the right -- always pick the smaller of the two to move up and traverse that subtree'
-					if(heap[getRightChildIndex(index)].priority < heap[getLeftChildIndex(index)].priority) {
+					
+					
+				}else{//If the right child is less than the left, then we choose to swap the right -- always pick the smaller of the two to move up and traverse that subtree
 						swapNodes(index, getRightChildIndex(index));//Swap the current node with its right child
 						minHeapify(getRightChildIndex(index));//Recurse down the right subtree and make the comparison again
 					}
 				}
 			}
 		}
-	}
 	
 	public void addItem(int priority, String data) throws IndexOutOfBoundsException{
 		if(size >= MAX_HEAP) {//Handle full heap
@@ -101,10 +103,10 @@ public class MinHeap {
 	
 	public String pullMin(){
 		if(size == 0) {
-			//System.out.println("pull0");//Debug
-			return "";//Return an empty string if the heap if empty
+			//System.out.println("peek0");//Debug
+			return "";//Return an empty string if heap is empty
 		}
-		//System.out.println(size);//Debug
+		//System.out.println("Pull" + size);//Debug
 		DataNode min_node = heap[ROOT_INDEX];//Used to hold the minimum value of the heap -- found at the root index
 		heap[ROOT_INDEX] = heap[size--];//Set the root indexes new value to last node according to level order, then decrement the size of the heap
 		minHeapify(ROOT_INDEX);//Heapify our heap -- move the new item at the root index down to form a valid heap if needed
