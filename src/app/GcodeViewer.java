@@ -3,6 +3,9 @@
  */
 package app;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -10,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * @author ConnorSullivan31
@@ -32,6 +36,9 @@ public class GcodeViewer {
 	private FabricLoader gcode_data;//Used to interface with the min heap priority queue for the gcode
 	private boolean is_editing;//Used to hold whether the user is editing data or not
 	
+	private Timeline validation_timer;//Used to check if what the user is entering is valid data
+	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
+	
 	public GcodeViewer() {
 		main_layout = new BorderPane();//Create border pane
 		viewer_label = new Label();//Create the label
@@ -49,6 +56,9 @@ public class GcodeViewer {
 		
 		gcode_data = new FabricLoader();//Create the controller interconnect
 		is_editing = false;//Start out with the user not editing data
+		
+		//Timer used to indicate to the user is the data that they are entering is valid
+		validation_timer = new Timeline(new KeyFrame(Duration.millis(validation_interval), event -> validateInput()));
 		
 		setupViewer();//Init values
 	}
@@ -101,6 +111,10 @@ public class GcodeViewer {
 		//Completed gcode layout
 		completed_layout.getChildren().addAll(completed_label, completed_display,clr_button);//Add the items to the vbox in this order
 		main_layout.setBottom(completed_layout);//Set the layout to be displayed on the bottom of the border pane
+		//Validation Timer
+		validation_timer.setCycleCount(Animation.INDEFINITE);
+		validation_timer.play();//Start Timer
+				
 	}
 	
 	private void respondToAddButton() {
@@ -166,6 +180,44 @@ public class GcodeViewer {
 		completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display
 		gcode_data.linkGcode().saveData();//Save our new data -- do this after since it is io and slower -- may not matter due to threads
 	}
+	
+	
+	private void validateInput() {
+		if(is_editing) {
+			//Only add if priority and gcode are both filled out and gcode is not just whitespace
+			if((gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false)) {
+				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string doesn't match the regex conditons for 1-100, then disable
+					viewer_label.setText("Set G-Code Priority - (Valid)");
+					gcode_viewer_label.setText("Enter G-Code - (Valid)");//Change the label to indicate that
+					add_button.setOpacity(1);
+					add_button.setDisable(false);//Enable the button
+				}
+			}else {
+				//If the gcode input is invalid, say so
+				if((gcode_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false) == false) {
+						gcode_viewer_label.setText("Enter G-Code - (Currently Invalid)");//Change the label to indicate that
+						add_button.setOpacity(.20);
+						add_button.setDisable(true);//Enable the button
+				}else {
+					gcode_viewer_label.setText("Enter G-Code - (Valid)");//Change the label to indicate that
+				}
+				//If the priority input is invalid, say so
+				if(gcode_data.linkGcode().validatePriority(priority_display.getText()) == false) {//If the priority string doesn't match the regex conditons for 1-100, then disable
+					viewer_label.setText("Set G-Code Priority - (Currently Invalid)");//Change the label to indicate that
+					add_button.setOpacity(.20);
+					add_button.setDisable(true);//Enable the button
+				}else {
+					viewer_label.setText("Set G-Code Priority - (Valid)");//Change the label to indicate that
+				}
+			}
+		}else {
+			//No need to change the label to back -- add or sub button will do this
+			add_button.setOpacity(1);
+			add_button.setDisable(false);//Enable the button
+		}
+	}
+	
+	
 }
 
 //Note:

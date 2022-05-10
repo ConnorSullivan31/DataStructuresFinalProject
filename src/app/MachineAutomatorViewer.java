@@ -3,12 +3,16 @@
  */
 package app;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 /**
  * @author ConnorSullivan31
@@ -24,6 +28,9 @@ public class MachineAutomatorViewer {
 	private FabricLoader automation_tasks;//Access the controller that will get the data from our stack class
 	private boolean is_editing;//Holds wether the user is entering data into the text area
 	
+	private Timeline validation_timer;//Used to check if what the user is entering is valid data
+	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
+	
 	public MachineAutomatorViewer() {
 		main_layout = new BorderPane();//Create the border pane
 		automator_viewer_label = new Label();//Create the label 
@@ -33,6 +40,9 @@ public class MachineAutomatorViewer {
 		sub_button = new Button();//Create the sub button
 		automation_tasks = new FabricLoader();//Creates the link between model and view
 		is_editing = false;//Start that the user is not editing data
+		
+		//Timer used to indicate to the user is the data that they are entering is valid
+		validation_timer = new Timeline(new KeyFrame(Duration.millis(validation_interval), event -> validateInput()));
 		
 		setupViewer();//Init values
 	}
@@ -62,6 +72,9 @@ public class MachineAutomatorViewer {
 		//Button Layout
 		button_layout.getChildren().addAll(add_button, sub_button);//Add the two buttons to the horizontal button layout. They will be displayed in the order they are added here.
 		main_layout.setBottom(button_layout);//Set the buttons to be displayed on the bottom of the border pane
+		//Validation Timer
+		validation_timer.setCycleCount(Animation.INDEFINITE);
+		validation_timer.play();//Start Timer
 	}
 	
 	public void updateView(String data) {
@@ -111,6 +124,25 @@ public class MachineAutomatorViewer {
 		}
 		
 	}
+	
+	private void validateInput() {
+		if(is_editing) {
+			if((automator_display.getText().length() > 0 && automation_tasks.linkBanner().isSolelyWhitespace(automator_display.getText()) == false) == false) {//Only validate if it is not empty or just whitespace
+				automator_viewer_label.setText("Enter Automation Task - (Currently Invalid)");//Change the label to indicate that
+				add_button.setOpacity(.20);
+				add_button.setDisable(true);//Disable the button until valid input
+			}else {
+				automator_viewer_label.setText("Enter Automation Task - (Valid)");//Change the label to indicate that
+				add_button.setOpacity(1);
+				add_button.setDisable(false);//Enable the button
+			}
+		}else {
+			//No need to change the label to back -- add or sub button will do this
+			add_button.setOpacity(1);
+			add_button.setDisable(false);//Enable the button
+		}
+	}
+	
 }
 //Notes:
 //Maybe add a timer here?

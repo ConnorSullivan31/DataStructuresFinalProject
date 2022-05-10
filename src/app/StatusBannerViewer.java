@@ -30,6 +30,9 @@ public class StatusBannerViewer {
 	private double timer_interval = 3000;//Set the timer interval to 3 seconds
 	private boolean is_editing;//Used to hold whether we are in edit mode
 	
+	private Timeline validation_timer;//Used to check if what the user is entering is valid data
+	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
+	
 	 StatusBannerViewer() {//Note comments here don't pertain to allocating the memory but what each object will do - kind of
 		main_layout = new BorderPane();//Create the layout for the machine status banner
 		status_banner_label = new Label();//Set the title for the machine status banner in the top of the BorderPane
@@ -43,6 +46,11 @@ public class StatusBannerViewer {
 		}));//This is our version of a timer
 		
 		is_editing = false;//Start out not in edit mode
+		
+		
+		//Timer used to indicate to the user is the data that they are entering is valid
+		validation_timer = new Timeline(new KeyFrame(Duration.millis(validation_interval), event -> validateInput()));
+		
 		
 		setupViewer();//Init the values for viewer
 	}
@@ -75,6 +83,10 @@ public class StatusBannerViewer {
 		//Timer
 		system_message_timer.setCycleCount(Animation.INDEFINITE);
 		system_message_timer.play();//Start Timer
+		//Validation Timer
+		validation_timer.setCycleCount(Animation.INDEFINITE);
+		validation_timer.play();//Start Timer
+		
 	}
 	
 	private void respondToAddButton() {
@@ -122,6 +134,25 @@ public class StatusBannerViewer {
 		}
 		
 	}
+	
+	private void validateInput() {
+		if(is_editing) {
+			if((status_banner_display.getText().length() > 0 && system_messages_list.linkBanner().isSolelyWhitespace(status_banner_display.getText()) == false) == false) {//Only validate if it is not empty or just whitespace
+				status_banner_label.setText("Enter Status Message - (Currently Invalid)");//Change the label to indicate that
+				add_button.setOpacity(.20);
+				add_button.setDisable(true);//Disable the button until valid input
+			}else {
+				status_banner_label.setText("Enter Status Message - (Valid)");//Change the label to indicate that
+				add_button.setOpacity(1);
+				add_button.setDisable(false);//Enable the button
+			}
+		}else {
+			//No need to change the label to back -- add or sub button will do this
+			add_button.setOpacity(1);
+			add_button.setDisable(false);//Enable the button
+		}
+	}
+	
 }
 //Notes:
 //system_message_timer.pause();//Pause Timer  --- Use this for our button
