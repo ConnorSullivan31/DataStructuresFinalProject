@@ -102,7 +102,7 @@ public class AppAssembler extends Application {
 			Scene main_view = new Scene(master_layout, 800,600);
 			
 			window.setScene(main_view);
-			window.setTitle("CNC Terminal 1.0");
+			window.setTitle("CNC Terminal 2.2");
 			window.show();
 
 		} catch (Exception e) {
