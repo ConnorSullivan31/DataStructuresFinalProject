@@ -53,7 +53,7 @@ public class GcodeFabric {
 	public boolean validatePriority(String data) {//Check if the user entered an integer
 		String temp;//Will hold our new string that doesnt contain any newlines or spaces
 		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
-		if(temp.matches("([0]*[1-9][0-9]?|[1][0][0])")) {//match 1 -100 accounting for leading zeros
+		if(temp.matches("([0]*[1-9][0-9]?)|([0]*[1][0]{2})")) {//match 1 -100 accounting for leading zeros
 			return true;//Return true if we have a semi-valid number, will become fully valid in formulatePriority();
 		}
 		
