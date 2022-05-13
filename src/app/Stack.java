@@ -13,12 +13,16 @@ public class Stack {
 	private String []stack;//Stack variable
 	private int size;//Size of stack;
 	
+	/**
+	 * Ctor
+	 */
 	Stack(){
 		stack = new String[MAX_STACK + 1];//Create an array of 9 elements - save the first element as an acess buffer to prevent index out of bounds
 		size = 0;//Set the size of our stack to 0 since it is empty to start
 	}
 	
 	/**
+	 * Returns and removes the top item on the stack
 	 * Surround this in a try-catch block
 	 * @return
 	 * @throws IndexOutOfBoundsException

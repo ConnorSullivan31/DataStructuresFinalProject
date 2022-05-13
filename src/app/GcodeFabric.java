@@ -16,12 +16,17 @@ public class GcodeFabric {
 	private String completed_instructions = "";//Holds the gcode that has been pulled from the min heap
 	private String heap_filename, completed_filename;//Filename for where we'll write the data for the heap and the completed instructions
 	
+	/**
+	 * Ctor
+	 */
 	GcodeFabric(){
 		loadGcodeData();//Generatre the min heap and give it dummy values for now, later change it to file input
 	}
 	
 	
-	//Gcode Viewer
+	/**
+	 * Loads data into the heap from the data files
+	 */
 	private void loadGcodeData() {
 		gcode_list = new MinHeap();//Create the heap for the gcode data
 		heap_filename = "GcodeData.dat";//Set the name for our file that holds data pulled from the heap
@@ -43,6 +48,11 @@ public class GcodeFabric {
 		return temp;//Return the dumped data with an arrow indicator for the top priority item
 	}
 	
+	/**
+	 * Checks if a string is only whitespace
+	 * @param data
+	 * @return true if there is purely whitespace for data
+	 */
 	public boolean isSolelyWhitespace(String data) {
 		if(data.matches("[\\s]+")) {
 			return true;//Return that the string is only whitespace
@@ -50,6 +60,11 @@ public class GcodeFabric {
 		return false;//Return that the data is not just whitespace
 	}
 	
+	/**
+	 * Checks input to see if string can be converted into valid integer from 1 - 100
+	 * @param data
+	 * @return
+	 */
 	public boolean validatePriority(String data) {//Check if the user entered an integer
 		String temp;//Will hold our new string that doesnt contain any newlines or spaces
 		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
@@ -60,12 +75,23 @@ public class GcodeFabric {
 		return false;//return false if we didn't match the regex
 	}
 	
+	/**
+	 * Creates and returns an integer priority based on the input string -- will have been passed through validate priority
+	 * This prevents any conversion errors, since we know any data input will be convertible
+	 * @param data
+	 * @return integer priority
+	 */
 	private int formulatePriority(String data) {
 		String temp;//Will hold our new string that doesnt contain any newlines or spaces
 		temp = data.replaceAll("[\\n\\s]", "");//Remove any newlines or spaces from the text box
 		return Integer.parseInt(temp);//Return the parsed data
 	}
 	
+	/**
+	 * Adds the input gcode string and its corresponding priority to the heap
+	 * @param pri
+	 * @param data
+	 */
 	public void addGCode(String pri, String data) {
 		String temp;//Holds our new string that doesn't contain newlines
 		
@@ -78,6 +104,9 @@ public class GcodeFabric {
 		}
 	}
 	
+	/**
+	 * Pulls the minimum value off of the heap and saves it to the completed instructions string
+	 */
 	public void removeGCode() {
 		String temp;//Used to hold the result of pull min	
 		//Returns an empty string if the size of the heap is zero -- No exceptions are needed because of the return
@@ -87,6 +116,10 @@ public class GcodeFabric {
 			}
 	}
 	
+	/**
+	 * Sends the completed gcode string data to the display
+	 * @return
+	 */
 	public String importCompletedCode() {
 		if(completed_instructions == "") {
 			return "[EMPTY]";//Indicate empty
@@ -94,10 +127,17 @@ public class GcodeFabric {
 		return completed_instructions;//Return the gcode pulled from min heap
 	}
 	
+	/**
+	 * Wipes out the string data that holds gcode previously pulled from the min heap
+	 */
 	public void clearCompletedCode() {
 		completed_instructions = "";//Clear the string that holds previous instructions
 	}
 	
+	/**
+	 * Returns whether there is room on the heap to store data
+	 * @return true if heap is not full
+	 */
 	public boolean isRoomG() {
 		if(gcode_list.isFull()) {
 			return false;
@@ -105,6 +145,9 @@ public class GcodeFabric {
 		return true;//Return true if there is room for a new task
 	}
 	
+	/**
+	 * Loads data from .dat file into the minheap
+	 */
 	private void loadData() {
 		String data = "";//Used to hold the data from the file data dump
 		String new_item = "", new_pri = "";//Used to hold a single data item and its priority
@@ -144,6 +187,9 @@ public class GcodeFabric {
 		
 	}
 	
+	/**
+	 * Saves data from the minheap to the .dat file
+	 */
 	public void saveData() {
 		FileIO heapfile = new FileIO(heap_filename,AccessMode.OUTPUT);//Open the file
 		heapfile.saveData(gcode_list.dumpMemory());//Write the circular linked list data to the file

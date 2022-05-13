@@ -22,6 +22,11 @@ public class FileIO {
 	private BufferedWriter output_stream;//Used to write data from the application to a file using file writer and our file desciptor
 	private AccessMode access_mode;//Holds whether we are reading or writing
 	
+	/**
+	 * Ctor
+	 * @param filename
+	 * @param mode -- input or output
+	 */
 	FileIO(String filename, AccessMode mode){
 		fd  = new File(filename);//Create a new file  
 		access_mode = mode;//Save whether we are reading or writing
@@ -59,7 +64,7 @@ public class FileIO {
 	
 	/**
 	 * Read in data from open file -- Overwrites previous data in file
-	 * Have to call the constructor again to open the file to wite data
+	 * Have to call the constructor again to open the file to write data
 	 * @return
 	 */
 	public String loadData() {
@@ -96,7 +101,11 @@ public class FileIO {
 	}
 	
 	
-	
+	/**
+	 * Enum
+	 * @author ConnorSullivan31
+	 *Access Modes are either input or output
+	 */
 	public enum AccessMode{
 		INPUT,OUTPUT;//File access modes
 	}

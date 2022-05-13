@@ -22,18 +22,40 @@ public class MinHeap {
 		heap[0] = new DataNode(Integer.MIN_VALUE, "");//Set the heap top to the minimum integer value possible with mt data -- only really used a base case for when we have one node
 	}
 	
+	/**
+	 * Getter for the index of the parent
+	 * @param index
+	 * @return the index of the parent position
+	 */
 	private int getParentIndex(int index) {
 		return (index/2);//Returns the index of the parent position
 	}
 	
+	/**
+	 * getter for the index of the right child
+	 * 
+	 * @param index
+	 * @return the index of the left right position
+	 */
 	private int getRightChildIndex(int index) {
 		return (2*index + 1);//Returns the index of the right child position
 	}
 	
+	/**
+	 * getter for the index of the left child
+	 * 
+	 * @param index
+	 * @return the index of the left child position
+	 */
 	private int getLeftChildIndex(int index) {
 		return (2*index);//Returns the index of the left child position
 	}
 	
+	/**
+	 * Checks if the current position is at a leaf node
+	 * @param index
+	 * @return if at leaf node of not
+	 */
 	private boolean atLeaf(int index) {
 		//if our current index position is greater than the index position of its parent and the index position is less than or equal to size, then were are a leaf node
 		//[-9999,3,4,7,8,9,10,12];size = 7; -- is 4 leaf? -- no, index = 2 !> 7/2 -> 2 !> 3 -- is 9 leaf? -- yes, index = 5 > 7/2 -> 5 > 3//Example
@@ -44,6 +66,12 @@ public class MinHeap {
 		return false;//Not at leaf node
 	}
 	
+	/**
+	 * Swaps two nodes based on their respective index
+	 * uses a temp var
+	 * @param index1
+	 * @param index2
+	 */
 	private void swapNodes(int index1, int index2) {
 		DataNode temp;//Used as a node placeholder
 		
@@ -52,6 +80,10 @@ public class MinHeap {
 		heap[index2] = temp;//Load saved first item into the second item
 	}
 	
+	/**
+	 * Sorts the heap for priority order
+	 * @param index
+	 */
 	private void minHeapify(int index) {//Move a larger item at the root node downwards until it meets minheap requirements
 		//If we are going to heapify, we can only do so if we are not already at a node index
 		//System.out.println("Heapify" + size);//Debug
@@ -73,6 +105,12 @@ public class MinHeap {
 			}
 		}
 	
+	/**
+	 * Adds item to heap and percolates the item into correct order of priority
+	 * @param priority
+	 * @param data
+	 * @throws IndexOutOfBoundsException
+	 */
 	public void addItem(int priority, String data) throws IndexOutOfBoundsException{
 		if(size >= MAX_HEAP) {//Handle full heap
 			throw new IndexOutOfBoundsException("Error: Heap is full");//Indicate heap is full
@@ -92,6 +130,10 @@ public class MinHeap {
 				
 	}
 	
+	/**
+	 * Returns the minimum value(root)
+	 * @return the root
+	 */
 	public String peekMin() {
 		if(size == 0) {
 			//System.out.println("peek0");//Debug
@@ -101,6 +143,12 @@ public class MinHeap {
 		return ("[" + min_node.priority + "] " + min_node.node_data);//return the stored min node -- specifically formatted for this assignment
 	}
 	
+	/**
+	 * Returns the minimum value given that the 
+	 * size of the heap is not zero
+	 * Resorts the heap after deletion
+	 * @return the min value in pre-formatted string
+	 */
 	public String pullMin(){
 		if(size == 0) {
 			//System.out.println("peek0");//Debug
@@ -123,6 +171,11 @@ public class MinHeap {
 		return false;//Return that there is room
 	}
 	
+	/**
+	 * Prints out each node
+	 * Used to store the heap into a file
+	 * @return temp variable which keeps increasing as i++
+	 */
 	public String dumpMemory() {
 		String temp = "";//Used to hold the heaps contents
 		for(int i = 1; i <= size; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
@@ -132,7 +185,11 @@ public class MinHeap {
 		return temp;//Return the created data
 	}
 	
-	
+	/**
+	 * Node class to hold an item in the heap
+	 * @author ConnorSullivan31
+	 *
+	 */
 	private class DataNode{
 		/**
 		 *Ctor 
@@ -147,18 +204,3 @@ public class MinHeap {
 	}
 	
 }
-
-//Notes:
-//Debug
-	/*private String dump() {//Dump the contents of the heap
-		String temp = "";//Used to hold the heaps contents
-		for(int i = 1; i < size/2; i++) {//Start the loop at 1 since we don't utilize index 0 of this array
-			temp += " PARENT : " + heap[i].node_data
-	                + " LEFT CHILD : " + heap[getLeftChildIndex(i)].node_data
-	                        + " RIGHT CHILD :" + heap[getRightChildIndex(i)].node_data + "\n";//Add the data and then the newline
-		}
-		System.out.println(temp);//Debug
-		return temp;//Return the created data
-	}*/
-
-

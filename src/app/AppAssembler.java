@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * @author ConnorSullivan31
@@ -36,10 +35,8 @@ public class AppAssembler extends Application {
 		launch();
 	}
 
-	// This is here just as a test for now
-
 	/**
-	 * Should spawn a blank window to verify that JavaFX is working
+	 * Launches our window
 	 */
 	@Override
 	public void start(Stage primaryStage) {
@@ -107,8 +104,8 @@ public class AppAssembler extends Application {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
+		}//Catch
+	}//Start
 	
 
-}
+}//Class

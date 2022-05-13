@@ -14,10 +14,16 @@ public class AutomatorFabric {
 		private Stack machine_tasks;//Used to hold the current automation tasks for the machine automator
 		private String filename;//Used to hold the filename where we'll store and read data
 		
+	/**
+	 * Ctor - calls loadMachineAutomator to setup memory and initial values
+	 */
 	AutomatorFabric(){
 		loadMachineAutomator();//Create the stack and load dummy data
 	}
 	
+		/**
+		 * Loads data from .dat file onto the stack
+		 */
 		private void loadMachineAutomator() {
 			machine_tasks = new Stack();//Create the task stack
 			filename = "AutomatorTasks.dat";//Create the filename to read and write to 
@@ -39,7 +45,11 @@ public class AutomatorFabric {
 			return temp;
 		}
 		
-		
+		/**
+		 * Method to check if the data is a white space -- used for input validation
+		 * @param data
+		 * @return
+		 */
 		public boolean isSolelyWhitespace(String data) {
 			if(data.matches("[\\s]+")) {
 				return true;//Return that the string is only whitespace
@@ -86,7 +96,9 @@ public class AutomatorFabric {
 			return true;//Return true if there is room for a new task
 		}
 		
-		
+		/**
+		 * Loads the data from the existing .dat file
+		 */
 		private void loadData() {
 			String data = "";//Used to hold the data from the file data dump
 			String new_item = "";//Used to hold a single data item
@@ -104,7 +116,9 @@ public class AutomatorFabric {
 			}
 			
 		}
-		
+		/**
+		 * Saves the data currently in the stack to its respective .dat file
+		 */
 		public void saveData() {
 			FileIO file = new FileIO(filename,AccessMode.OUTPUT);//Open the file
 			file.saveData(machine_tasks.exportMemory());//Write the stack data to the file -- bottom to top

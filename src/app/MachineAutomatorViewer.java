@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
@@ -31,6 +30,9 @@ public class MachineAutomatorViewer {
 	private Timeline validation_timer;//Used to check if what the user is entering is valid data
 	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
 	
+	/**
+	 * Ctor
+	 */
 	public MachineAutomatorViewer() {
 		main_layout = new BorderPane();//Create the border pane
 		automator_viewer_label = new Label();//Create the label 
@@ -47,10 +49,17 @@ public class MachineAutomatorViewer {
 		setupViewer();//Init values
 	}
 	
+	/**
+	 * Returns the object for the main layout to be used in a larger parent layout in the app assembler
+	 * @return
+	 */
 	public BorderPane getViewer() {
 		return main_layout;//Return the main layout
 	}
 	
+	/**
+	 * Sets the initial values for this viewer's layout
+	 */
 	private void setupViewer() {
 		//Label
 		automator_viewer_label.setText("Automator Tasks");
@@ -77,10 +86,9 @@ public class MachineAutomatorViewer {
 		validation_timer.play();//Start Timer
 	}
 	
-	public void updateView(String data) {
-		automator_display.setText(data);//Update the text area with new data
-	}
-	
+	/**
+	 * Updates the view accordingly when the add button is pushed
+	 */
 	private void respondToAddButton() {
 		//maybe add a timer pause here
 		if(automation_tasks.linkAutomator().isRoom() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
@@ -98,7 +106,7 @@ public class MachineAutomatorViewer {
 			sub_button.setText("-");//Reset Buttons
 			automator_viewer_label.setText("Automator Tasks");
 			automator_display.setEditable(false);//Disable editing of the field
-			if(automator_display.getText().length() > 0 && automation_tasks.linkBanner().isSolelyWhitespace(automator_display.getText()) == false) {//Only add task if it is not empty or just whitespace
+			if(automator_display.getText().length() > 0 && automation_tasks.linkAutomator().isSolelyWhitespace(automator_display.getText()) == false) {//Only add task if it is not empty or just whitespace
 				automation_tasks.linkAutomator().addTask(automator_display.getText());
 				automation_tasks.linkAutomator().saveData();//Save the data to the file
 			}
@@ -108,6 +116,9 @@ public class MachineAutomatorViewer {
 		
 	}
 	
+	/**
+	 * Updates the view accordingly if the subtract button is pushed
+	 */
 	private void respondToSubButton() {
 		//maybe add more actions here
 		if(is_editing) {
@@ -125,9 +136,12 @@ public class MachineAutomatorViewer {
 		
 	}
 	
+	/**
+	 * Checks the users input to see if it is valid -- if not, don't let them save the data
+	 */
 	private void validateInput() {
 		if(is_editing) {
-			if((automator_display.getText().length() > 0 && automation_tasks.linkBanner().isSolelyWhitespace(automator_display.getText()) == false) == false) {//Only validate if it is not empty or just whitespace
+			if((automator_display.getText().length() > 0 && automation_tasks.linkAutomator().isSolelyWhitespace(automator_display.getText()) == false) == false) {//Only validate if it is not empty or just whitespace
 				automator_viewer_label.setText("Enter Automation Task - (Currently Invalid)");//Change the label to indicate that
 				add_button.setOpacity(.20);
 				add_button.setDisable(true);//Disable the button until valid input
@@ -144,5 +158,3 @@ public class MachineAutomatorViewer {
 	}
 	
 }
-//Notes:
-//Maybe add a timer here?

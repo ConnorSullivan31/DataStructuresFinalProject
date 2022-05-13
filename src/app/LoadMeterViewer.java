@@ -12,7 +12,6 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -34,6 +33,9 @@ public class LoadMeterViewer {
 	private Random rand_generator;//Holds a random number for our load meters
 	double x_prev = 0.0, x_new = 0.0, y_prev = 0.0, y_new = 0.0, z_prev = 0.0, z_new = 0.0, s_prev = 0.0, s_new = 0.0;//Placeholder values for bar fading
 	
+	/**
+	 * Ctor
+	 */
 	public LoadMeterViewer() {
 		main_layout = new BorderPane();//Create the border pane
 		load_meter_label = new Label();//Create the label
@@ -53,10 +55,17 @@ public class LoadMeterViewer {
 		setupViewer();//Init values
 	}
 	
+	/**
+	 * Returns the object to our main layout so it can be nested in larger window outside this class
+	 * @return
+	 */
 	public BorderPane getViewer() {
 		return main_layout;//Return the main layout
 	}
 	
+	/**
+	 * Sets up the layout and defaults for this viewer
+	 */
 	private void setupViewer() {
 		//Label
 		load_meter_label.setText("Load Monitoring (%)");
@@ -91,6 +100,9 @@ public class LoadMeterViewer {
 		load_timer.play();//Start Timer
 	}
 	
+	/**
+	 * Fades the loading bars from one random value to another
+	 */
 	private void randomizeLoadValues() {
 
 		//Random X fading
@@ -196,8 +208,11 @@ public class LoadMeterViewer {
 		
 	}//func
 	
-////////////////////////////////////////////
-//This class got big -- Maybe offload it to its own class in the future
+	/**
+	 * This class creates a single instance of a load meter, making it easier to create multiple above
+	 * @author ConnorSullivan31
+	 *
+	 */
 	private class LoadMeter {
 		private HBox load_layout;//Main layout for a load meter
 		private Label load_axis_label;//Holds the axis label for the load meter
@@ -208,6 +223,9 @@ public class LoadMeterViewer {
 		private String axis_label = "N/A: ";//Holds the name for the load meter  - init to n/a in case we forget to set the value later
 		private DecimalFormat load_val_format;//Clips our load vals to two decimal places
 		
+		/**
+		 * Ctor
+		 */
 		public LoadMeter() {
 			load_layout = new HBox();//Create the layout
 			load_axis_label = new Label();//Create the label
@@ -217,10 +235,17 @@ public class LoadMeterViewer {
 			setupLoadMeter();//Init values
 		}
 		
+		/**
+		 * Returns the object that holds the layout of the load meter so it can be used in the main class layout above
+		 * @return
+		 */
 		public HBox getLoadMeter() {
 			return load_layout;//Return the main layout
 		}
 		
+		/**
+		 * Sets initial values for the layout
+		 */
 		private void setupLoadMeter() {
 			//Label
 			load_axis_label.setText(axis_label);//Set the axis text to the value passed in through setAxis()
@@ -237,11 +262,19 @@ public class LoadMeterViewer {
 			load_val_format.applyLocalizedPattern("00");//Set the pattern for the load percentages
 		}
 		
+		/**
+		 * Sets the axis label for the load meter bar
+		 * @param axis
+		 */
 		public void setAxis(String axis) {
 			axis_label = axis;//Set the input text for the load meters axis label
 			load_axis_label.setText(axis);//Update the actual axis label
 		}
 		
+		/**
+		 * Sets and updates the percentage of fill on the progress bar
+		 * @param load
+		 */
 		public void setLoad(double load) {
 			load_val = load;//Set the load value of the progress bar
 			load_bar.setProgress(load_val);//Update the actual load bar

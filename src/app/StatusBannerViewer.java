@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
@@ -33,6 +32,9 @@ public class StatusBannerViewer {
 	private Timeline validation_timer;//Used to check if what the user is entering is valid data
 	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
 	
+	/**
+	 * Ctor
+	 */
 	 StatusBannerViewer() {//Note comments here don't pertain to allocating the memory but what each object will do - kind of
 		main_layout = new BorderPane();//Create the layout for the machine status banner
 		status_banner_label = new Label();//Set the title for the machine status banner in the top of the BorderPane
@@ -54,11 +56,18 @@ public class StatusBannerViewer {
 		
 		setupViewer();//Init the values for viewer
 	}
-	 
+	
+	/**
+	 *Returns the main layout object to be implemented into the parent layout 
+	 * @return
+	 */
 	public BorderPane getViewer() {
 		return main_layout;//Return the main layout
 	}
 	
+	/**
+	 * Set the default values for this viewer's layout
+	 */
 	private void setupViewer() {
 		//Label
 		status_banner_label.setText("Machine Status");//Set the label text
@@ -89,6 +98,9 @@ public class StatusBannerViewer {
 		
 	}
 	
+	/**
+	 * Updates the viewer based on the current edit mode when the user pushes the add button
+	 */
 	private void respondToAddButton() {
 		if(is_editing == false) {//If there is room, go ahead with allowing the user to enter input
 			system_message_timer.pause();//Pause the timer
@@ -117,6 +129,9 @@ public class StatusBannerViewer {
 		
 	}
 	
+	/**
+	 * Updates the viewer based on the current edit mode when the user pushes the subtract button
+	 */
 	private void respondToSubButton() {
 		//maybe add more actions here
 		if(is_editing) {
@@ -135,6 +150,9 @@ public class StatusBannerViewer {
 		
 	}
 	
+	/**
+	 * Checks if what the user has input is valid -- don't let them save unless it is valid
+	 */
 	private void validateInput() {
 		if(is_editing) {
 			if((status_banner_display.getText().length() > 0 && system_messages_list.linkBanner().isSolelyWhitespace(status_banner_display.getText()) == false) == false) {//Only validate if it is not empty or just whitespace

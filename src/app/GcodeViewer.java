@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -39,6 +38,9 @@ public class GcodeViewer {
 	private Timeline validation_timer;//Used to check if what the user is entering is valid data
 	private double validation_interval = 50;//Set so that we check text validation every 50 milliseconds
 	
+	/**
+	 * Ctor
+	 */
 	public GcodeViewer() {
 		main_layout = new BorderPane();//Create border pane
 		viewer_label = new Label();//Create the label
@@ -63,10 +65,17 @@ public class GcodeViewer {
 		setupViewer();//Init values
 	}
 	
+	/**
+	 * Returns the object that holds the layout information for this viewer
+	 * @return
+	 */
 	public BorderPane getViewer() {
 		return main_layout;//Return the main layout
 	}
 	
+	/**
+	 * Set up the viewers layouts and defaults
+	 */
 	private void setupViewer() {
 		//Label -- Gcode label in view mode, priority label in edit mode
 		viewer_label.setText("G-Code Viewer");
@@ -117,6 +126,9 @@ public class GcodeViewer {
 				
 	}
 	
+	/**
+	 * Called when the user pushes the add button and modifies the view accordingly
+	 */
 	private void respondToAddButton() {
 		//maybe add a timer pause here
 		if(gcode_data.linkGcode().isRoomG() && is_editing == false) {//If there is room, go ahead with allowing the user to enter input
@@ -143,7 +155,7 @@ public class GcodeViewer {
 			gcode_view_layout.getChildren().clear();//Clear the vbox for a redraw
 			gcode_view_layout.getChildren().addAll(gcode_display,button_layout);//Add the gcode display, button layout, and completed label back to the vbox layout
 			gcode_display.setEditable(false);//Disable editing of the field
-			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false) {//Only add if priority and gcode are both filled outf and gcode is not just whitespace
+			if(gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkGcode().isSolelyWhitespace(gcode_display.getText()) == false) {//Only add if priority and gcode are both filled outf and gcode is not just whitespace
 				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string matches the regex conditons for 1-100, then go ahead and add
 				gcode_data.linkGcode().addGCode(priority_display.getText(),gcode_display.getText());//Get the text from the priority field, get the text from the gcode field
 				gcode_data.linkGcode().saveData();//Save the data to the file
@@ -155,6 +167,9 @@ public class GcodeViewer {
 		
 	}
 	
+	/**
+	 * Called when the user pushes the subtract button and modifies the view accordingly
+	 */
 	private void respondToSubButton() {
 		//maybe add more actions here
 		if(is_editing) {
@@ -175,17 +190,23 @@ public class GcodeViewer {
 		}
 	}
 	
+	/**
+	 * Used to clear data from the previously ran gcode list
+	 */
 	private void respondToClearButton() {
 		gcode_data.linkGcode().clearCompletedCode();//Clear the completed code string
 		completed_display.setText(gcode_data.linkGcode().importCompletedCode());//Update the display
 		gcode_data.linkGcode().saveData();//Save our new data -- do this after since it is io and slower -- may not matter due to threads
 	}
 	
-	
+	/**
+	 * Called on a timer basis. Used to indicate to the user whether their currently input data is valid
+	 * It disables saving if their data is not yet valid
+	 */
 	private void validateInput() {
 		if(is_editing) {
 			//Only add if priority and gcode are both filled out and gcode is not just whitespace
-			if((gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false)) {
+			if((gcode_display.getText().length() > 0 && priority_display.getText().length() > 0 && gcode_data.linkGcode().isSolelyWhitespace(gcode_display.getText()) == false)) {
 				if(gcode_data.linkGcode().validatePriority(priority_display.getText())) {//If the priority string doesn't match the regex conditons for 1-100, then disable
 					viewer_label.setText("Set G-Code Priority - (Valid)");
 					gcode_viewer_label.setText("Enter G-Code - (Valid)");//Change the label to indicate that
@@ -194,7 +215,7 @@ public class GcodeViewer {
 				}
 			}else {
 				//If the gcode input is invalid, say so
-				if((gcode_display.getText().length() > 0 && gcode_data.linkBanner().isSolelyWhitespace(gcode_display.getText()) == false) == false) {
+				if((gcode_display.getText().length() > 0 && gcode_data.linkGcode().isSolelyWhitespace(gcode_display.getText()) == false) == false) {
 						gcode_viewer_label.setText("Enter G-Code - (Currently Invalid)");//Change the label to indicate that
 						add_button.setOpacity(.20);
 						add_button.setDisable(true);//Enable the button
@@ -221,6 +242,4 @@ public class GcodeViewer {
 }
 
 //Note:
-//Maybe add a timer to this class. I'm not totally sure yet
-
 //main_layout.getChildren().remove(gcode_display);//This is an example of how to remove the main gcode text box

@@ -20,15 +20,13 @@ public class BannerFabric {
 	public BannerFabric() {
 		loadSystemBanner();//Create the linked list and load data
 	}
-	
+	/**
+	 * Loads messages from the doubly circular linked list
+	 */
 	private void loadSystemBanner() {
 		system_messages = new CircularLL<>();
 		filename = "StatsBanner.dat";//Hardcode the name of the file to save the data to
 		loadData();//Load in the data to the linked list from the file
-		
-		/*system_messages.addItemImmediate("1:POWER = ON");//Eventually replace these with file input
-		system_messages.addItemImmediate("2:OIL LEVEL = OK");
-		system_messages.addItemImmediate("3:COOLANT LEVEL = HGIH");*/
 	}
 	
 	/**
@@ -47,6 +45,11 @@ public class BannerFabric {
 		return temp;//Return the next message in the list
 	}
 	
+	/**
+	 * Method to determine whether the data contains whitespace or not -- used for input validation
+	 * @param data
+	 * @return
+	 */
 	public boolean isSolelyWhitespace(String data) {
 		if(data.matches("[\\s]+")) {
 			return true;//Return that the string is only whitespace
@@ -54,6 +57,10 @@ public class BannerFabric {
 		return false;//Return that the data is not just whitespace
 	}
 	
+	/**
+	 * Adds a new data item to the doubly circular linked list
+	 * @param msg
+	 */
 	public void addMessage(String msg) {
 		String temp;//Holds our new string that doesn't contain newlines
 		temp = msg.replaceAll("\\n", " ");///Replace any newlines from the text box with a space
@@ -61,6 +68,9 @@ public class BannerFabric {
 		system_messages.addItemImmediate(temp + "\n");//Add a message to the linked list -- re-add that newline that we removed earlier
 	}
 	
+	/**
+	 * Remove the currently indexed item for the DC linked list
+	 */
 	public void removeMessage() {
 		try {
 			system_messages.deleteCurrentItem();//Remove the current item
@@ -69,6 +79,9 @@ public class BannerFabric {
 		}
 	}
 	
+	/**
+	 * Loads data from the corresponding .dat file into the DC Linked List
+	 */
 	private void loadData() {
 		String data = "";//Used to hold the data from the file data dump
 		String new_item = "";//Used to hold a single data item
@@ -87,13 +100,12 @@ public class BannerFabric {
 		
 	}
 	
+	/**
+	 * Saves the contents currently in the DC LL to its respective .dat file
+	 */
 	public void saveData() {
 		FileIO file = new FileIO(filename,AccessMode.OUTPUT);//Open the file
 		file.saveData(system_messages.dumpMemory());//Write the circular linked list data to the file
 	}
-	
-	/*public boolean isEmpty() {
-		return system_messages.isEmpty();
-	}*/
 	
 }

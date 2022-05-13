@@ -3,8 +3,6 @@
  */
 package app;
 
-import javafx.css.Size;
-
 /**
  * @author ConnorSullivan31
  *
@@ -67,7 +65,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 	 * 
 	 * @param item_data
 	 */
-	 private void addItem(T item_data) {
+	 /*private void addItem(T item_data) {
 		Node new_item = new Node(item_data, sentinel_node,sentinel_node.prev_node_address);// Continue chain. New data gets link to sentinal nodes address
 		sentinel_node.prev_node_address = new_item;//Set the sentinals back link to the new node
 		new_item.prev_node_address.next_node_address = new_item;//Point the node before to the new node
@@ -75,8 +73,12 @@ public class CircularLL<T extends Comparable<? super T>> {
 		
 		// System.out.println(new_item.node_data);//Remove eventually
 		list_size++;
-	}
+	}*/
 	 
+	 /**
+	  * Adds item immediately after the position of the iterator node
+	  * @param item_data
+	  */
 	 public void addItemImmediate(T item_data) {
 		 Node new_item = new Node(item_data, iterative_node_addr,iterative_node_addr.prev_node_address);// Continue chain. New data gets link to sentinal nodes address
 			iterative_node_addr.prev_node_address = new_item;//Set the sentinals back link to the new node
@@ -87,7 +89,9 @@ public class CircularLL<T extends Comparable<? super T>> {
 			list_size++;
 	 }
 	
-	//Returns the next node with valid data in the circularly linked list
+	 	/**
+	  	*Returns the next node with valid data in the circularly linked list
+		*/
 		public T getNext() {
 			if(list_size == 0) {
 				return null;//Return an empty string if our only node is the sentinal
@@ -102,8 +106,10 @@ public class CircularLL<T extends Comparable<? super T>> {
 			return iterative_node_addr.node_data;//Return the next string data
 		}
 	
-		//Returns the next previous node with valid data in the circularly linked list
-		//Probably wont use this, doubly linking is only for the easy delete ability, but we may need to rotate through the list backward at some point, but keep private for now
+		/**
+		 *Returns the next previous node with valid data in the circularly linked list
+		 *Probably wont use this, doubly linking is only for the easy delete ability, but we may need to rotate through the list backward at some point, but keep private for now
+		 */
 		public T getPrev() {
 			if(list_size == 0) {
 				return null;//Return an empty string if our only node is the sentinal
@@ -117,8 +123,9 @@ public class CircularLL<T extends Comparable<? super T>> {
 
 			return iterative_node_addr.node_data;//Return the next string data
 		}
-		
-		//Returns the next node with valid data in the circularly linked list
+		/**
+		 *Returns the next node with valid data in the circularly linked list
+		 */
 		public T getCurrent() {
 			if(list_size == 0) {
 				return null;//Return an empty string if our only node is the sentinal
@@ -142,6 +149,10 @@ public class CircularLL<T extends Comparable<? super T>> {
 			return false;//If size is greater than zero, then there are items in the list
 		}*/
 		
+		/**
+		 * Method to return everything from memory -- used mainly for persistance
+		 * @return
+		 */
 		public String dumpMemory() {//Used for debugging
 			String temp = "";
 			Node loc_it;
@@ -156,7 +167,8 @@ public class CircularLL<T extends Comparable<? super T>> {
 			
 		}
 		
-		private String debugMemory() {//Used for debugging
+		
+		/*private String debugMemory() {//Used for debugging
 			String temp = "";
 			Node loc_it;
 			loc_it = sentinel_node;
@@ -169,7 +181,7 @@ public class CircularLL<T extends Comparable<? super T>> {
 			//System.out.println("Sentinal: ("+ sentinel_node+ " : " + sentinel_node.next_node_address + "," + sentinel_node.prev_node_address + ")");//Debug
 			return temp;
 			
-		}
+		}*/
 				
 		
 	private class Node {
